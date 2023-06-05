@@ -27,6 +27,7 @@ public class DeathScreenMixin extends Screen {
 
     @Inject(at = @At("TAIL"), method="init")
     private void addAutoRespawnButton(CallbackInfo ci) {
+        ExampleMod.deathCoordinateDisplay.updateDeath();
         buttons.add(addDrawableChild(ModMenuScreen.createButtonWidget(
                 Text.literal(ExampleMod.autoRespawn.toString()),
                 button -> {

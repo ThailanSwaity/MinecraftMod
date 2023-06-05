@@ -29,6 +29,8 @@ public class ExampleMod implements ModInitializer {
 	public static AutoBridge autoBridge;
 	public static AutoRespawn autoRespawn;
 	public static SpeedMine speedMine;
+	public static PlayerCoordinateDisplay playerCoordinateDisplay;
+	public static DeathCoordinateDisplay deathCoordinateDisplay;
 
 	public AdditionManager additionManager = new AdditionManager();
 	public static ExampleMod getInstance() {
@@ -43,17 +45,17 @@ public class ExampleMod implements ModInitializer {
 		instance = this;
 
 		keyBinding_r = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-				"key.ThaiFood.xray",
+				"Xray cycle",
 				InputUtil.Type.KEYSYM,
 				GLFW.GLFW_KEY_R,
-				"category.ThaiFood.hack"
+				"Hacks"
 		));
 
 		keyBinding_y = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-				"key.ThaiFood.teleport",
+				"Teleport",
 				InputUtil.Type.KEYSYM,
 				GLFW.GLFW_KEY_Y,
-				"category.ThaiFood.hack"
+				"Hacks"
 		));
 
 		client = MinecraftClient.getInstance();
@@ -64,6 +66,10 @@ public class ExampleMod implements ModInitializer {
 		additionManager.add(new NoFallDamage(client));
 		additionManager.add(new BoatFly(client));
 		additionManager.add(new AutoEat(client));
+		playerCoordinateDisplay = new PlayerCoordinateDisplay(client);
+		additionManager.add(playerCoordinateDisplay);
+		deathCoordinateDisplay = new DeathCoordinateDisplay(client);
+		additionManager.add(deathCoordinateDisplay);
 		fullBright = new FullBright();
 		additionManager.add(fullBright);
 		xray = new Xray(client);
@@ -79,7 +85,7 @@ public class ExampleMod implements ModInitializer {
 				Blocks.GRANITE,
 				Blocks.BASALT,
 				Blocks.BLACKSTONE
-				);
+		);
 
 		xray.addBlocksCAVE(
 				Blocks.DIRT,
