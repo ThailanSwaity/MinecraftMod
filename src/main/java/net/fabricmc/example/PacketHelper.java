@@ -36,6 +36,13 @@ public class PacketHelper {
         conn.sendImmediate(packet2, null);
     }
 
+    public static void sendBlockBreak(BlockPos pos, Direction direction) {
+        MinecraftClient client = ExampleMod.getInstance().client;
+        ClientConnectionInvoker conn = (ClientConnectionInvoker)client.player.networkHandler.getConnection();
+        Packet packet = new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.STOP_DESTROY_BLOCK, pos, direction);
+        conn.sendImmediate(packet, null);
+    }
+
     public static void sendOnGroundOnly(PlayerMoveC2SPacket packet) {
         MinecraftClient client = ExampleMod.getInstance().client;
         ClientConnectionInvoker conn = (ClientConnectionInvoker)client.player.networkHandler.getConnection();

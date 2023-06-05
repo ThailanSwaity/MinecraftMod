@@ -26,6 +26,9 @@ public class Teleport {
     public void setDistance(int distance) {
         this.distance = distance;
     }
+    public int getDistance() {
+        return this.distance;
+    }
 
     public void decrement(int value) {
         distance -= value;

@@ -10,6 +10,7 @@ import net.minecraft.client.gui.widget.GridWidget;
 import net.minecraft.client.gui.widget.SimplePositioningWidget;
 import net.minecraft.client.gui.widget.SliderWidget;
 import net.minecraft.text.Text;
+import org.lwjgl.openal.EXTStereoAngles;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -56,19 +57,32 @@ public class ModMenuScreen extends Screen {
 
         adder.add(teleportButton);
 
-        SliderWidget teleportDistanceSlider = new SliderWidget(0, 0, 130, 20, Text.literal("Teleport distance"), 10D) {
+        SliderWidget teleportDistanceSlider = new SliderWidget(0, 0, 130, 20, Text.literal("Tp " + ExampleMod.teleport.getDistance() + " blocks"), ((double)ExampleMod.teleport.getDistance() / 100)) {
             @Override
             protected void updateMessage() {
-                setMessage(Text.literal("" + (int)(value * 100)));
+                setMessage(Text.literal("Tp " + (int)(value * 100) + " blocks"));
             }
 
             @Override
             protected void applyValue() {
                 ExampleMod.teleport.setDistance((int)(value * 100));
-                ExampleMod.LOGGER.info("Slider value: " + value);
                 teleportButton.setMessage(Text.literal(ExampleMod.teleport.toString()));
             }
         };
+
+        SliderWidget speedMineSlider = new SliderWidget(0, 0, 130, 20, Text.literal(String.format("%.2f", ExampleMod.speedMine.getTriggerChance())), ExampleMod.speedMine.getTriggerChance()) {
+            @Override
+            protected void updateMessage() {
+                setMessage(Text.literal(String.format("%.2f", value)));
+            }
+
+            @Override
+            protected void applyValue() {
+                ExampleMod.speedMine.setTriggerChance(value);
+            }
+        };
+
+        adder.add(speedMineSlider);
 
         adder.add(teleportDistanceSlider);
 

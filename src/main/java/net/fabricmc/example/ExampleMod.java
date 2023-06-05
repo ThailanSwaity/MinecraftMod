@@ -43,17 +43,17 @@ public class ExampleMod implements ModInitializer {
 		instance = this;
 
 		keyBinding_r = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-				"key.examplemod.fly",
+				"key.ThaiFood.xray",
 				InputUtil.Type.KEYSYM,
 				GLFW.GLFW_KEY_R,
-				"category.examplemod.hack"
+				"category.ThaiFood.hack"
 		));
 
 		keyBinding_y = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-				"key.examplemod.teleport",
+				"key.ThaiFood.teleport",
 				InputUtil.Type.KEYSYM,
 				GLFW.GLFW_KEY_Y,
-				"category.examplemod.hack"
+				"category.ThaiFood.hack"
 		));
 
 		client = MinecraftClient.getInstance();
@@ -105,7 +105,7 @@ public class ExampleMod implements ModInitializer {
 		additionManager.add(autoFish);
 		autoBridge = new AutoBridge(client);
 		additionManager.add(autoBridge);
-		speedMine = new SpeedMine();
+		speedMine = new SpeedMine(client);
 		additionManager.add(speedMine);
 
 		ClientTickEvents.END_CLIENT_TICK.register(client1 -> {

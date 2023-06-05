@@ -3,6 +3,8 @@ package net.fabricmc.example.mixin;
 import net.fabricmc.example.ExampleMod;
 import net.fabricmc.example.PacketHelper;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -27,14 +29,12 @@ public abstract class ClientPlayerInteractionManagerMixin {
     @Inject(at = @At("HEAD"), method = "updateBlockBreakingProgress", cancellable = true)
     public void updateBlockBreakingProgress(BlockPos pos, Direction direction, CallbackInfoReturnable<Boolean> cir) {
         if (ExampleMod.speedMine.isEnabled()) {
-            if (currentBreakingProgress >= 0.4f) {
-                breakingBlock = false;
-                PacketHelper.sendBlockBreakStartAndEnd(pos, direction);
+            if (ExampleMod.speedMine.shouldTrigger(pos)) {
 
-                currentBreakingProgress = 0.0f;
-                blockBreakingSoundCooldown = 0.0f;
+                PacketHelper.sendBlockBreak(pos, direction);
+
+                //breakingBlock = false;
                 blockBreakingSoundCooldown = 5;
-                //breakBlock(pos);
                 ExampleMod.LOGGER.info("Speeding up mining progress.");
                 cir.setReturnValue(false);
             }

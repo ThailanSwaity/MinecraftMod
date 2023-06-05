@@ -25,9 +25,6 @@ public class AutoEat extends Hack implements Tickable {
         if (!isEnabled()) return;
 
         int hungerLevel = client.player.getHungerManager().getFoodLevel();
-        //ExampleMod.LOGGER.info("Hunger level: " + hungerLevel);
-        ExampleMod.LOGGER.info("Is using item: " + client.player.isUsingItem());
-        ExampleMod.LOGGER.info("Old slot: " + oldSlot);
         if (hungerLevel > 18) {
             if (isEating && !client.player.isUsingItem()) {
                 isEating = false;
@@ -45,7 +42,6 @@ public class AutoEat extends Hack implements Tickable {
         }
         if (!isEating) oldSlot = client.player.getInventory().selectedSlot;
         client.player.getInventory().selectedSlot = foodSlot;
-        //ExampleMod.LOGGER.info("Slot selected: " + foodSlot);
         client.options.useKey.setPressed(true);
         isEating = true;
     }
