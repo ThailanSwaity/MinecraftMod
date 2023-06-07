@@ -31,7 +31,8 @@ public class ExampleMod implements ModInitializer {
 	public static SpeedMine speedMine;
 	public static PlayerCoordinateDisplay playerCoordinateDisplay;
 	public static DeathCoordinateDisplay deathCoordinateDisplay;
-
+	public static EntityControl entityControl;
+	public static EntityNames entityNames;
 	public AdditionManager additionManager = new AdditionManager();
 	public static ExampleMod getInstance() {
 		return instance;
@@ -68,6 +69,10 @@ public class ExampleMod implements ModInitializer {
 		additionManager.add(new AutoEat(client));
 		playerCoordinateDisplay = new PlayerCoordinateDisplay(client);
 		additionManager.add(playerCoordinateDisplay);
+		entityNames = new EntityNames();
+		additionManager.add(entityNames);
+		entityControl = new EntityControl(client);
+		additionManager.add(entityControl);
 		deathCoordinateDisplay = new DeathCoordinateDisplay(client);
 		additionManager.add(deathCoordinateDisplay);
 		fullBright = new FullBright();
@@ -105,6 +110,7 @@ public class ExampleMod implements ModInitializer {
 		// Teleporter is not a hack;
 		teleport = new Teleport(client);
 		teleport.setDistance(10);
+		additionManager.add(teleport);
 
 		additionManager.add(new AutoCrop(client));
 		autoFish = new AutoFish(client);

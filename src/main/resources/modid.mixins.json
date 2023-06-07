@@ -13,6 +13,8 @@
     "DeathScreenMixin",
     "InGameHudMixin",
     "LightmapTextureManagerMixin",
+    "AbstractHorseEntityMixin",
+    "EntityMixin",
     "BlockMixin",
     "MinecraftClientMixin",
     "FishingBobberEntityMixin",

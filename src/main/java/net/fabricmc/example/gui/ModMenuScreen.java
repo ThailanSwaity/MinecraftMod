@@ -1,7 +1,6 @@
 package net.fabricmc.example.gui;
 
 import net.fabricmc.example.ExampleMod;
-import net.fabricmc.example.Teleport;
 import net.fabricmc.example.additions.Hack;
 import net.fabricmc.example.additions.Xray;
 import net.minecraft.client.gui.screen.Screen;
@@ -10,9 +9,7 @@ import net.minecraft.client.gui.widget.GridWidget;
 import net.minecraft.client.gui.widget.SimplePositioningWidget;
 import net.minecraft.client.gui.widget.SliderWidget;
 import net.minecraft.text.Text;
-import org.lwjgl.openal.EXTStereoAngles;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 public class ModMenuScreen extends Screen {
@@ -49,7 +46,7 @@ public class ModMenuScreen extends Screen {
         });
 
         ButtonWidget teleportButton = ButtonWidget.builder(
-                Text.literal(ExampleMod.teleport.toString()),
+                Text.literal("Teleport " + ExampleMod.teleport.getDistance() + " blocks"),
                 button -> {
                     ExampleMod.teleport.teleport();
                 }
@@ -66,7 +63,7 @@ public class ModMenuScreen extends Screen {
             @Override
             protected void applyValue() {
                 ExampleMod.teleport.setDistance((int)(value * 100));
-                teleportButton.setMessage(Text.literal(ExampleMod.teleport.toString()));
+                teleportButton.setMessage(Text.literal("Teleport " + ExampleMod.teleport.getDistance() + " blocks"));
             }
         };
 
