@@ -30,11 +30,11 @@ public abstract class AbstractHorseEntityMixin {
 
     @Inject(at = @At("TAIL"), method = "updateSaddle", cancellable = true)
     public void setSaddled(CallbackInfo ci) {
-        if (ExampleMod.entityControl.isEnabled()) {
-            if (!((AbstractHorseEntity)(Object)this).world.isClient) {
-                setHorseFlag(4, true);
-            }
-        }
+//        if (ExampleMod.entityControl.isEnabled()) {
+//            if (!((Entity)(Object)this).world.isClient) {
+//                setHorseFlag(4, true);
+//            }
+//        }
     }
 
     @Inject(at = @At("HEAD"), method = "isSaddled", cancellable = true)

@@ -33,6 +33,7 @@ public class AutoEat extends Hack implements Tickable {
             } else if (isEating && hungerLevel == 20) {
                 isEating = false;
                 client.options.useKey.setPressed(false);
+                client.player.getInventory().selectedSlot = oldSlot;
             }
             return;
         }

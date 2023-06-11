@@ -1,5 +1,6 @@
 package net.fabricmc.example.additions;
 
+import net.fabricmc.example.ExampleMod;
 import net.fabricmc.example.Tickable;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.Item;
@@ -9,6 +10,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
 public class AutoBridge extends Hack implements Tickable {
@@ -25,15 +27,27 @@ public class AutoBridge extends Hack implements Tickable {
 
         Item item = client.player.getOffHandStack().getItem();
         if (Item.BLOCK_ITEMS.containsValue(item)) {
-            BlockPos steppingPos = client.player.getSteppingPos();
+            BlockPos steppingPos = getPlayerFootPosition();
+            ExampleMod.LOGGER.info("Is stepping block air: " + client.world.getBlockState(steppingPos).isAir());
+            ExampleMod.LOGGER.info("Block type: " + client.world.getBlockState(steppingPos).getBlock().toString());
+
             if (client.world.getBlockState(steppingPos).isAir()) {
                 if (getBuildDirection(steppingPos) != null) {
                     Direction bridgeDirection = getBuildDirection(steppingPos);
+                    ExampleMod.LOGGER.info("Direction: " + bridgeDirection.toString());
                     // TODO: Make the hack place blocks when player jumps
                     tryPlaceBlock(steppingPos, bridgeDirection);
                 }
             }
         }
+    }
+
+    private BlockPos getPlayerFootPosition() {
+        double offset = 1.0E-5F;
+        int i = MathHelper.floor(client.player.getX());
+        int j = MathHelper.floor(client.player.getY() - (double)offset);
+        int k = MathHelper.floor(client.player.getZ());
+        return new BlockPos(i, j, k);
     }
 
     public boolean tryPlaceBlock(BlockPos pos, Direction side) {
