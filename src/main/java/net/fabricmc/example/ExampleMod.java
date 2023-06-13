@@ -30,9 +30,12 @@ public class ExampleMod implements ModInitializer {
 	public static AutoRespawn autoRespawn;
 	public static SpeedMine speedMine;
 	public static PlayerCoordinateDisplay playerCoordinateDisplay;
+	public static SpawnCoordinateDisplay spawnCoordinateDisplay;
 	public static DeathCoordinateDisplay deathCoordinateDisplay;
+	public static ArmourHUD armourHUD;
 	public static EntityControl entityControl;
 	public static EntityNames entityNames;
+	public static ChunkTracking chunkTracking;
 	public AdditionManager additionManager = new AdditionManager();
 	public static ExampleMod getInstance() {
 		return instance;
@@ -69,12 +72,18 @@ public class ExampleMod implements ModInitializer {
 		additionManager.add(new AutoEat(client));
 		playerCoordinateDisplay = new PlayerCoordinateDisplay(client);
 		additionManager.add(playerCoordinateDisplay);
+		spawnCoordinateDisplay = new SpawnCoordinateDisplay(client);
+		additionManager.add(spawnCoordinateDisplay);
 		entityNames = new EntityNames();
 		additionManager.add(entityNames);
 		entityControl = new EntityControl(client);
 		additionManager.add(entityControl);
 		deathCoordinateDisplay = new DeathCoordinateDisplay(client);
 		additionManager.add(deathCoordinateDisplay);
+		chunkTracking = new ChunkTracking(client);
+		additionManager.add(chunkTracking);
+		armourHUD = new ArmourHUD();
+		additionManager.add(armourHUD);
 		fullBright = new FullBright();
 		additionManager.add(fullBright);
 		xray = new Xray(client);

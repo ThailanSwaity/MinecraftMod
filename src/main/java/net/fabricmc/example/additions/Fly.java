@@ -20,7 +20,7 @@ public class Fly extends Hack implements Tickable {
     }
 
     public void tick() {
-        if (!isEnabled()) {
+        if (!isEnabled() && !client.player.isCreative()) {
             client.player.getAbilities().allowFlying = false;
             return;
         }
