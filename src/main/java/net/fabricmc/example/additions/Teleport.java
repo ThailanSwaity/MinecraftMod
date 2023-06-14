@@ -4,6 +4,7 @@ import net.fabricmc.example.ExampleMod;
 import net.fabricmc.example.PacketHelper;
 import net.fabricmc.example.Tickable;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
@@ -66,6 +67,28 @@ public class Teleport extends Hack implements Tickable {
 
         client.player.setPos(targetPos.getX(), targetPos.getY(), targetPos.getZ());
         PacketHelper.sendPositionOnGround(targetPos);
+    }
+
+    public static void tp(ClientPlayerEntity player,  Vec3d targetPos) {
+        for (int i = 0; i < 10; i++) {
+            PacketHelper.sendPositionOnGround(player.getPos());
+        }
+
+        player.setPos(targetPos.getX(), targetPos.getY(), targetPos.getZ());
+        PacketHelper.sendPositionOnGround(targetPos);
+    }
+
+    public static void tpTo(ClientPlayerEntity player, Vec3d targetPos) {
+        double maxMovementDist = 8.0;
+        Vec3d dist = new Vec3d(targetPos.getX() - player.getX(), targetPos.getY() - player.getY(), targetPos.getZ() - player.getZ());
+        Vec3d moveVector = dist.multiply(1/maxMovementDist);
+
+        Vec3d position = new Vec3d(player.getX(), player.getY(), player.getZ());
+        int steps = (int)Math.floor(dist.length() / maxMovementDist);
+        for (int i = 0; i < steps; i++) {
+            position = position.add(moveVector);
+            PacketHelper.sendPosition(position);
+        }
     }
 
     @Override

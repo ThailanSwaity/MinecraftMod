@@ -3,7 +3,7 @@ package net.fabricmc.example.additions;
 public abstract class Hack {
 
     private boolean enabled = false;
-    private String name = "";
+    protected String name = "";
 
     public Hack(String name) {
         this.name = name;

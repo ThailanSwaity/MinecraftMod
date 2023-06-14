@@ -6,6 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.network.packet.c2s.play.VehicleMoveC2SPacket;
 import net.minecraft.util.math.BlockPos;
@@ -35,6 +36,13 @@ public class PacketHelper {
         ClientConnectionInvoker conn = (ClientConnectionInvoker)client.player.networkHandler.getConnection();
         pos = PacketHelper.fixCoords(pos);
         Packet packet = new PlayerMoveC2SPacket.PositionAndOnGround(pos.getX(), pos.getY(), pos.getZ(), true);
+        conn.sendImmediate(packet, null);
+    }
+
+    public static void sendPlayerAttack(Entity entity) {
+        MinecraftClient client = ExampleMod.getInstance().client;
+        ClientConnectionInvoker conn = (ClientConnectionInvoker)client.player.networkHandler.getConnection();
+        Packet packet = PlayerInteractEntityC2SPacket.attack(entity, client.player.isSneaking());
         conn.sendImmediate(packet, null);
     }
 

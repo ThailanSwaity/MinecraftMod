@@ -70,6 +70,9 @@ public class ExampleMod implements ModInitializer {
 		additionManager.add(new NoFallDamage(client));
 		additionManager.add(new BoatFly(client));
 		additionManager.add(new AutoEat(client));
+		additionManager.add(new EntityTp(client));
+		additionManager.add(new KillAura(client));
+		additionManager.add(new Reach(client));
 		playerCoordinateDisplay = new PlayerCoordinateDisplay(client);
 		additionManager.add(playerCoordinateDisplay);
 		spawnCoordinateDisplay = new SpawnCoordinateDisplay(client);
