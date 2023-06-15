@@ -45,4 +45,8 @@ public abstract class Hack {
         return enabled;
     }
 
+    public String getName() {
+        return name;
+    }
+
 }

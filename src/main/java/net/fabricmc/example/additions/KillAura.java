@@ -6,6 +6,8 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.entity.mob.Monster;
+import net.minecraft.entity.mob.ZombifiedPiglinEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
 
@@ -37,10 +39,10 @@ public class KillAura extends Hack implements Tickable {
 
         if (client.player.getAttackCooldownProgress(0.5f) < 1.0) return;
         for (Entity entity : client.world.getEntities()) {
-            if (entity == client.player) continue;
+            if (entity == client.player || entity instanceof ZombifiedPiglinEntity) continue;
             double dist = client.player.getPos().distanceTo(entity.getPos());
             if (dist > client.interactionManager.getReachDistance()) continue;
-            if (entity instanceof HostileEntity && (mode == HOSTILES || mode == HOSTILES_AND_PASSIVES || mode == PLAYERS_AND_HOSTILES)) {
+            if (entity instanceof Monster && (mode == HOSTILES || mode == HOSTILES_AND_PASSIVES || mode == PLAYERS_AND_HOSTILES)) {
                 client.interactionManager.attackEntity(client.player, entity);
             }
             if (entity instanceof PassiveEntity && (mode == PASSIVES || mode == HOSTILES_AND_PASSIVES)) {
