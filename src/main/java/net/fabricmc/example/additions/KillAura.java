@@ -42,17 +42,22 @@ public class KillAura extends Hack implements Tickable {
             if (entity == client.player || entity instanceof ZombifiedPiglinEntity) continue;
             double dist = client.player.getPos().distanceTo(entity.getPos());
             if (dist > client.interactionManager.getReachDistance()) continue;
+            if (entity == null) return;
             if (entity instanceof Monster && (mode == HOSTILES || mode == HOSTILES_AND_PASSIVES || mode == PLAYERS_AND_HOSTILES)) {
                 client.interactionManager.attackEntity(client.player, entity);
+                return;
             }
             if (entity instanceof PassiveEntity && (mode == PASSIVES || mode == HOSTILES_AND_PASSIVES)) {
                 client.interactionManager.attackEntity(client.player, entity);
+                return;
             }
             if (entity instanceof PlayerEntity && (mode == PLAYERS || mode == PLAYERS_AND_HOSTILES)) {
                 client.interactionManager.attackEntity(client.player, entity);
+                return;
             }
             if (entity instanceof LivingEntity && mode == ALL) {
                 client.interactionManager.attackEntity(client.player, entity);
+                return;
             }
         }
     }
