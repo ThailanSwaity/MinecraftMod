@@ -7,12 +7,14 @@ import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 @Mixin(InGameHud.class)
@@ -41,6 +43,13 @@ public abstract class InGameHudMixin {
         }
         if (ExampleMod.chunkTracking.isEnabled()) {
             context.drawTextWithShadow(getTextRenderer(), "Chunk age: " + ExampleMod.chunkTracking.playerChunkAge(), 0, 0, 0xFFFFFF);
+        }
+        if (ExampleMod.detectPlayers.isEnabled()) {
+            context.drawTextWithShadow(getTextRenderer(), "Nearby Players:", 3, 0, 0xFFFFFF);
+            ArrayList<Text> players = ExampleMod.detectPlayers.getNearbyPlayers();
+            for (int i = 0; i < players.size(); i++) {
+                context.drawTextWithShadow(getTextRenderer(), players.get(i), 3, i * 13 + 13, 0xFFFFFF);
+            }
         }
 
     }

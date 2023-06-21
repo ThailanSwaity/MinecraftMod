@@ -37,6 +37,7 @@ public class ExampleMod implements ModInitializer {
 	public static EntityNames entityNames;
 	public static ChunkTracking chunkTracking;
 	public static NoWeather noWeather;
+	public static DetectPlayers detectPlayers;
 	public AdditionManager additionManager = new AdditionManager();
 	public static ExampleMod getInstance() {
 		return instance;
@@ -92,6 +93,8 @@ public class ExampleMod implements ModInitializer {
 		additionManager.add(fullBright);
 		noWeather = new NoWeather();
 		additionManager.add(noWeather);
+		detectPlayers = new DetectPlayers(client);
+		additionManager.add(detectPlayers);
 		xray = new Xray(client);
 		xray.addBlocksORE(
 				Blocks.STONE,
