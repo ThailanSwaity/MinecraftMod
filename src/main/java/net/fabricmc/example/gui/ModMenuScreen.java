@@ -37,10 +37,10 @@ public class ModMenuScreen extends Screen {
 
         ArrayList<Hack> hackList = ExampleMod.getInstance().additionManager.getAdditions();
         hackList.forEach(hack -> {
-            ButtonWidget buttonWidget = createButtonWidget(Text.literal(hack.toString()), (button) -> {
+            ButtonWidget buttonWidget = createButtonWidget(hack.getString(), (button) -> {
                 if (hack instanceof Xray) ((Xray) hack).cycle();
                 else hack.toggle();
-                button.setMessage(Text.literal(hack.toString()));
+                button.setMessage(hack.getString());
             }, 130, 20);
             adder.add(buttonWidget);
         });

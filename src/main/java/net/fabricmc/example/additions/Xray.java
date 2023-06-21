@@ -2,6 +2,8 @@ package net.fabricmc.example.additions;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 import java.util.HashSet;
 
@@ -79,6 +81,13 @@ public class Xray extends Hack {
         else if (getMode() == Xray.CAVE_MODE) xrayString = "Xray showing CAVES";
         else if (getMode() == Xray.SPAWNER_MODE) xrayString = "Xray showing SPAWNERS";
         return xrayString;
+    }
+
+    @Override
+    public Text getString() {
+        if (!isEnabled()) return super.getString();
+        String xrayString = toString();
+        return Text.empty().append(xrayString).formatted(Formatting.GREEN);
     }
 
     public boolean blockIsVisible(Block block) {

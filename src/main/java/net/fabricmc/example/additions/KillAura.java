@@ -6,10 +6,13 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.mob.ZombifiedPiglinEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 public class KillAura extends Hack implements Tickable {
 
@@ -42,6 +45,9 @@ public class KillAura extends Hack implements Tickable {
             if (entity == client.player || entity instanceof ZombifiedPiglinEntity) continue;
             double dist = client.player.getPos().distanceTo(entity.getPos());
             if (dist > client.interactionManager.getReachDistance()) continue;
+            if (entity instanceof MobEntity) {
+                if (((MobEntity)entity).getHealth() <= 0) continue;
+            }
             if (entity == null) return;
             if (entity instanceof Monster && (mode == HOSTILES || mode == HOSTILES_AND_PASSIVES || mode == PLAYERS_AND_HOSTILES)) {
                 client.interactionManager.attackEntity(client.player, entity);
@@ -72,6 +78,13 @@ public class KillAura extends Hack implements Tickable {
         else if (mode == HOSTILES_AND_PASSIVES) return name + ": HOSTILES_AND_PASSIVES";
         else if (mode == ALL) return name + ": ALL";
         return "Error";
+    }
+
+    @Override
+    public Text getString() {
+        if (mode == 0) return super.getString();
+        String text = toString();
+        return Text.empty().append(text).formatted(Formatting.GREEN);
     }
 
 }

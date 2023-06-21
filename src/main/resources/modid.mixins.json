@@ -12,6 +12,7 @@
     "ClientPlayerEntityMixin",
     "DeathScreenMixin",
     "InGameHudMixin",
+    "WorldRendererMixin",
     "LightmapTextureManagerMixin",
     "EntityRendererMixin",
     "AbstractHorseEntityMixin",

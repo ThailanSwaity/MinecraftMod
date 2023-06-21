@@ -1,5 +1,8 @@
 package net.fabricmc.example.additions;
 
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
+
 public abstract class Hack {
 
     private boolean enabled = false;
@@ -47,6 +50,11 @@ public abstract class Hack {
 
     public String getName() {
         return name;
+    }
+
+    public Text getString() {
+        if (!isEnabled()) return Text.literal(toString());
+        return Text.literal(toString()).formatted(Formatting.GREEN);
     }
 
 }
