@@ -79,9 +79,23 @@ public class ModMenuScreen extends Screen {
             }
         };
 
+        SliderWidget flySpeedSlider = new SliderWidget(0, 0, 130, 20, Text.literal(String.format("%.2f", ExampleMod.fly.getFlySpeed())), ExampleMod.fly.getFlySpeed()) {
+            @Override
+            protected void updateMessage() {
+                setMessage(Text.literal(String.format("%.2f", value)));
+            }
+
+            @Override
+            protected void applyValue() {
+                ExampleMod.fly.setFlySpeed((float)value);
+            }
+        };
+
         adder.add(speedMineSlider);
 
         adder.add(teleportDistanceSlider);
+
+        adder.add(flySpeedSlider);
 
         gridWidget.refreshPositions();
         SimplePositioningWidget.setPos(gridWidget, 0, 0, this.width, this.height, 0.5f, 0.25f);

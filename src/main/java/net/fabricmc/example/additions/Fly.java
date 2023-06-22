@@ -13,6 +13,7 @@ public class Fly extends Hack implements Tickable {
     private MinecraftClient client;
     private ClientPlayerEntity player;
     private int ticksFloating = 0;
+    private float flySpeed = 0.05f;
 
     public Fly(MinecraftClient client) {
         super("Fly");
@@ -26,9 +27,11 @@ public class Fly extends Hack implements Tickable {
         }
 
         client.player.getAbilities().allowFlying = true;
+        client.player.getAbilities().setFlySpeed(flySpeed);
         if (client.player.getVelocity().getY() <= -0.05 && client.player.getAbilities().flying) {
             PacketHelper.sendOnGroundOnly(new PlayerMoveC2SPacket.OnGroundOnly(true));
         }
+        ExampleMod.LOGGER.info("Fly speed: " + client.player.getAbilities().getFlySpeed());
         if (++ticksFloating > 10 && client.player.getSteppingBlockState().isAir() && !client.player.isOnGround()) {
             PacketHelper.sendPosition(client.player.getPos().subtract(0.0, 0.0433D, 0.0));
 
@@ -44,6 +47,14 @@ public class Fly extends Hack implements Tickable {
     @Override
     protected void onDisable() {
         client.player.getAbilities().allowFlying = false;
+    }
+
+    public void setFlySpeed(float flySpeed) {
+        this.flySpeed = flySpeed;
+    }
+
+    public float getFlySpeed() {
+        return flySpeed;
     }
 
 }

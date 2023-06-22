@@ -24,6 +24,7 @@ public class ExampleMod implements ModInitializer {
 	public MinecraftClient client;
 	public static FullBright fullBright;
 	public static Xray xray;
+	public static Fly fly;
 	public static Teleport teleport;
 	public static AutoFish autoFish;
 	public static AutoBridge autoBridge;
@@ -68,7 +69,8 @@ public class ExampleMod implements ModInitializer {
 
 		autoRespawn = new AutoRespawn();
 		additionManager.add(autoRespawn);
-		additionManager.add(new Fly(client));
+		fly = new Fly(client);
+		additionManager.add(fly);
 		additionManager.add(new NoFallDamage(client));
 		additionManager.add(new BoatFly(client));
 		additionManager.add(new AutoEat(client));
