@@ -39,6 +39,7 @@ public class ExampleMod implements ModInitializer {
 	public static ChunkTracking chunkTracking;
 	public static NoWeather noWeather;
 	public static DetectPlayers detectPlayers;
+	public static ChatWatermark chatWatermark;
 	public AdditionManager additionManager = new AdditionManager();
 	public static ExampleMod getInstance() {
 		return instance;
@@ -93,6 +94,8 @@ public class ExampleMod implements ModInitializer {
 		additionManager.add(armourHUD);
 		fullBright = new FullBright();
 		additionManager.add(fullBright);
+		chatWatermark = new ChatWatermark();
+		additionManager.add(chatWatermark);
 		noWeather = new NoWeather();
 		additionManager.add(noWeather);
 		detectPlayers = new DetectPlayers(client);

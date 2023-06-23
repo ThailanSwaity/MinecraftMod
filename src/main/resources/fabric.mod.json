@@ -3,10 +3,10 @@
   "id": "modid",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "ThaiFood Client",
+  "description": "This is a client for and by ThaiFood",
   "authors": [
-    "Me!"
+    "SweatyThaiFood"
   ],
   "contact": {
     "homepage": "https://fabricmc.net/",

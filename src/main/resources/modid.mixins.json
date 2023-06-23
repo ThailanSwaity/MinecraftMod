@@ -11,6 +11,7 @@
     "ClientConnectionInvoker",
     "ClientPlayerEntityMixin",
     "DeathScreenMixin",
+    "ChatScreenMixin",
     "InGameHudMixin",
     "WorldRendererMixin",
     "LightmapTextureManagerMixin",
