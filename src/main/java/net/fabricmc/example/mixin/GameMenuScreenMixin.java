@@ -24,8 +24,8 @@ public abstract class GameMenuScreenMixin extends Screen {
 
     @Inject(at = @At("TAIL"), method = "initWidgets()V")
     public void initWidgets(CallbackInfo ci) {
-        ModMenuScreen modMenuScreen = new ModMenuScreen(Text.literal("ExampleMod"), this);
-        ButtonWidget.Builder builder = ButtonWidget.builder(Text.literal("ExampleMod"), button -> this.client.setScreen(modMenuScreen));
+        ModMenuScreen modMenuScreen = new ModMenuScreen(Text.literal("TʜᴀɪFᴏᴏᴅ Cʟɪᴇɴᴛ"), this);
+        ButtonWidget.Builder builder = ButtonWidget.builder(Text.literal("TʜᴀɪFᴏᴏᴅ Cʟɪᴇɴᴛ"), button -> this.client.setScreen(modMenuScreen));
 
 
         addDrawableChild(builder.build());
