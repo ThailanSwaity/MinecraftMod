@@ -31,7 +31,6 @@ public class Fly extends Hack implements Tickable {
         if (client.player.getVelocity().getY() <= -0.05 && client.player.getAbilities().flying) {
             PacketHelper.sendOnGroundOnly(new PlayerMoveC2SPacket.OnGroundOnly(true));
         }
-        ExampleMod.LOGGER.info("Fly speed: " + client.player.getAbilities().getFlySpeed());
         if (++ticksFloating > 10 && client.player.getSteppingBlockState().isAir() && !client.player.isOnGround()) {
             PacketHelper.sendPosition(client.player.getPos().subtract(0.0, 0.0433D, 0.0));
 

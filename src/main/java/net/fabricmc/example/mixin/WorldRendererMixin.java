@@ -1,13 +1,20 @@
 package net.fabricmc.example.mixin;
 
+import net.fabricmc.example.Colour;
 import net.fabricmc.example.ExampleMod;
 import net.fabricmc.example.Renderer;
+import net.fabricmc.example.WorldUtil;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.NetherPortalBlock;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.ChestBlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.*;
+import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
@@ -44,20 +51,36 @@ public abstract class WorldRendererMixin {
 
     @Inject(at = @At("TAIL"), method = "render")
     private void render(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, CallbackInfo ci) {
-        //Vec3d playerPos = MinecraftClient.getInstance().player.getPos();
-        //Renderer.drawLine(playerPos.getX(), playerPos.getY(), playerPos.getZ(), 0, 0, 0, 5f);
-        checkEmpty(matrices);
-        Profiler profiler = world.getProfiler();
-        profiler.swap("outline");
-        Vec3d cameraEntityPos = camera.getPos();
-        BlockPos steppingPos = camera.getFocusedEntity().getSteppingPos();
-        BlockState blockState = world.getBlockState(steppingPos);
-        double d = cameraEntityPos.getX();
-        double e = cameraEntityPos.getY();
-        double f = cameraEntityPos.getZ();
-        VertexConsumerProvider.Immediate immediate = this.bufferBuilders.getEntityVertexConsumers();
-        VertexConsumer vertexConsumer = immediate.getBuffer(RenderLayer.getLines());
-        drawBlockOutline(matrices, vertexConsumer, camera.getFocusedEntity(), d, e, f, steppingPos, blockState);
+        Vec3d viewVec = camera.getFocusedEntity().getRotationVec(0.5f);
+        Vec3d cursorPosition = camera.getPos().add(viewVec);
+        if (ExampleMod.detectPlayers.isEnabled()) {
+            for (Entity entity : world.getEntities()) {
+                if (entity instanceof PlayerEntity && entity != camera.getFocusedEntity()) {
+                    Renderer.drawLine(cursorPosition.getX(), cursorPosition.getY(), cursorPosition.getZ(), entity.getX(), entity.getY(), entity.getZ(), 1f, Colour.RED);
+                }
+            }
+        }
+        if (ExampleMod.chestTracers.isEnabled()) {
+            for (BlockEntity blockEntity : WorldUtil.getBlockEntities()) {
+                if (blockEntity instanceof ChestBlockEntity) {
+                    BlockPos pos = blockEntity.getPos();
+                    Renderer.drawLine(cursorPosition.getX(), cursorPosition.getY(), cursorPosition.getZ(), pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f, 1f, Colour.GREEN);
+                }
+            }
+        }
+
+//        checkEmpty(matrices);
+//        Profiler profiler = world.getProfiler();
+//        profiler.swap("outline");
+//        Vec3d cameraEntityPos = camera.getPos();
+//        BlockPos steppingPos = camera.getFocusedEntity().getSteppingPos();
+//        BlockState blockState = world.getBlockState(steppingPos);
+//        double d = cameraEntityPos.getX();
+//        double e = cameraEntityPos.getY();
+//        double f = cameraEntityPos.getZ();
+//        VertexConsumerProvider.Immediate immediate = this.bufferBuilders.getEntityVertexConsumers();
+//        VertexConsumer vertexConsumer = immediate.getBuffer(RenderLayer.getLines());
+//        drawBlockOutline(matrices, vertexConsumer, camera.getFocusedEntity(), d, e, f, steppingPos, blockState);
     }
 
 }

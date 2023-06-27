@@ -12,7 +12,7 @@ import org.joml.Vector3f;
 
 public class Renderer {
 
-    public static void drawLine(double x1, double y1, double z1, double x2, double y2, double z2, float width) {
+    public static void drawLine(double x1, double y1, double z1, double x2, double y2, double z2, float width, Colour colour) {
 
         setup();
 
@@ -28,7 +28,7 @@ public class Renderer {
         RenderSystem.lineWidth(width);
 
         buffer.begin(VertexFormat.DrawMode.LINES, VertexFormats.LINES);
-        vertexLine(matrices, buffer, 0f, 0f, 0f, (float) (x2 - x1), (float) (y2 - y1), (float) (z2 - z1));
+        vertexLine(matrices, buffer, 0, 0, 0, (float) (x2 - x1), (float) (y2 - y1), (float) (z2 - z1), colour);
         tessellator.draw();
 
         RenderSystem.enableCull();
@@ -36,14 +36,14 @@ public class Renderer {
         cleanup();
     }
 
-    public static void vertexLine(MatrixStack matrices, VertexConsumer vertexConsumer, float x1, float y1, float z1, float x2, float y2, float z2) {
+    public static void vertexLine(MatrixStack matrices, VertexConsumer vertexConsumer, float x1, float y1, float z1, float x2, float y2, float z2, Colour colour) {
         Matrix4f model = matrices.peek().getPositionMatrix();
         Matrix3f normal = matrices.peek().getNormalMatrix();
 
         Vector3f normalVec = getNormal(x1, y1, z1, x2, y2, z2);
 
-        vertexConsumer.vertex(model, x1, y1, z1).color(255f, 0f, 0f, 0f).normal(normal, normalVec.x(), normalVec.y(), normalVec.z()).next();
-        vertexConsumer.vertex(model, x2, y2, z2).color(255f, 0f, 0f, 0f).normal(normal, normalVec.x(), normalVec.y(), normalVec.z()).next();
+        vertexConsumer.vertex(model, x1, y1, z1).color(colour.getR(), colour.getG(), colour.getB(), 1.0F).normal(normal, normalVec.x(), normalVec.y(), normalVec.z()).next();
+        vertexConsumer.vertex(model, x2, y2, z2).color(colour.getR(), colour.getG(), colour.getB(), 1.0F).normal(normal, normalVec.x(), normalVec.y(), normalVec.z()).next();
     }
 
     public static Vector3f getNormal(float x1, float y1, float z1, float x2, float y2, float z2) {

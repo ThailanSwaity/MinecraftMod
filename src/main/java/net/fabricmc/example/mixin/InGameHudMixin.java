@@ -1,6 +1,7 @@
 package net.fabricmc.example.mixin;
 
 import net.fabricmc.example.ExampleMod;
+import net.fabricmc.example.Renderer;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
@@ -8,6 +9,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -51,7 +53,6 @@ public abstract class InGameHudMixin {
                 context.drawTextWithShadow(getTextRenderer(), players.get(i), 3, i * 13 + 13, 0xFFFFFF);
             }
         }
-
     }
 
     @Inject(at = @At("TAIL"), method = "renderHotbar")
