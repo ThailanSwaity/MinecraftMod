@@ -1,10 +1,12 @@
 package net.fabricmc.example.mixin;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.fabricmc.example.Colour;
 import net.fabricmc.example.ExampleMod;
 import net.fabricmc.example.Renderer;
 import net.fabricmc.example.WorldUtil;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.NetherPortalBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.ChestBlockEntity;
@@ -20,6 +22,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.profiler.Profiler;
+import net.minecraft.world.chunk.WorldChunk;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Final;
@@ -41,6 +44,8 @@ public abstract class WorldRendererMixin {
     @Shadow @Nullable private ClientWorld world;
 
     @Shadow protected abstract void checkEmpty(MatrixStack matrices);
+
+    @Shadow @Final private Int2ObjectMap<BlockBreakingInfo> blockBreakingInfos;
 
     @Inject(at = @At("HEAD"), method = "renderWeather", cancellable = true)
     private void renderWeather(CallbackInfo ci) {
@@ -66,6 +71,13 @@ public abstract class WorldRendererMixin {
                     BlockPos pos = blockEntity.getPos();
                     Renderer.drawLine(cursorPosition.getX(), cursorPosition.getY(), cursorPosition.getZ(), pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f, 1f, Colour.GREEN);
                 }
+            }
+        }
+        if (ExampleMod.portalTracers.isEnabled()) {
+            for (WorldChunk chunk : WorldUtil.getLoadedChunks()) {
+                chunk.forEachBlockMatchingPredicate((blockState) -> blockState.getBlock() == Blocks.NETHER_PORTAL || blockState.getBlock() == Blocks.END_PORTAL, (blockPos, blockState) -> {
+                    Renderer.drawLine(cursorPosition.getX(), cursorPosition.getY(), cursorPosition.getZ(), blockPos.getX() + 0.5f, blockPos.getY() + 0.5f, blockPos.getZ() + 0.5f, 1f, Colour.PURPLE);
+                });
             }
         }
 

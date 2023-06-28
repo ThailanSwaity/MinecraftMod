@@ -40,6 +40,7 @@ public class ExampleMod implements ModInitializer {
 	public static NoWeather noWeather;
 	public static DetectPlayers detectPlayers;
 	public static ChestTracers chestTracers;
+	public static PortalTracers portalTracers;
 	public static ChatWatermark chatWatermark;
 	public AdditionManager additionManager = new AdditionManager();
 	public static ExampleMod getInstance() {
@@ -103,6 +104,8 @@ public class ExampleMod implements ModInitializer {
 		additionManager.add(detectPlayers);
 		chestTracers = new ChestTracers();
 		additionManager.add(chestTracers);
+		portalTracers = new PortalTracers();
+		additionManager.add(portalTracers);
 		xray = new Xray(client);
 		xray.addBlocksORE(
 				Blocks.STONE,
