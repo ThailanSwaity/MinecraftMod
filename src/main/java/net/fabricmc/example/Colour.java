@@ -10,6 +10,7 @@ public class Colour {
     public static final Colour GREEN = new Colour(0.0F, 1.0F, 0.0F);
     public static final Colour BLUE = new Colour(0.0F, 0.0F, 1.0F);
     public static final Colour PURPLE = new Colour(1.0F, 0.0F, 1.0F);
+    public static final Colour LIGHT_BLUE = new Colour(0.0F, 1.0F, 1.0F);
 
     public Colour(float r, float g, float b) {
         this.r = r;

@@ -10,6 +10,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.NetherPortalBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.ChestBlockEntity;
+import net.minecraft.block.entity.EnderChestBlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.*;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
@@ -65,11 +66,20 @@ public abstract class WorldRendererMixin {
                 }
             }
         }
-        if (ExampleMod.chestTracers.isEnabled()) {
+        if (ExampleMod.chestTracers.isEnabled() || ExampleMod.chestESP.isEnabled()) {
             for (BlockEntity blockEntity : WorldUtil.getBlockEntities()) {
+                BlockPos pos = blockEntity.getPos();
                 if (blockEntity instanceof ChestBlockEntity) {
-                    BlockPos pos = blockEntity.getPos();
-                    Renderer.drawLine(cursorPosition.getX(), cursorPosition.getY(), cursorPosition.getZ(), pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f, 1f, Colour.GREEN);
+                    if (ExampleMod.chestTracers.isEnabled())
+                        Renderer.drawLine(cursorPosition.getX(), cursorPosition.getY(), cursorPosition.getZ(), pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f, 1f, Colour.GREEN);
+                    if (ExampleMod.chestESP.isEnabled()) {
+                        Renderer.drawBoxOutline(pos, Colour.LIGHT_BLUE, 1f);
+                    }
+                } else if (blockEntity instanceof EnderChestBlockEntity) {
+                    if (ExampleMod.chestTracers.isEnabled())
+                        Renderer.drawLine(cursorPosition.getX(), cursorPosition.getY(), cursorPosition.getZ(), pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f, 1f, Colour.GREEN);
+                    if (ExampleMod.chestESP.isEnabled())
+                        Renderer.drawBoxOutline(pos, Colour.PURPLE, 1f);
                 }
             }
         }
@@ -80,19 +90,6 @@ public abstract class WorldRendererMixin {
                 });
             }
         }
-
-//        checkEmpty(matrices);
-//        Profiler profiler = world.getProfiler();
-//        profiler.swap("outline");
-//        Vec3d cameraEntityPos = camera.getPos();
-//        BlockPos steppingPos = camera.getFocusedEntity().getSteppingPos();
-//        BlockState blockState = world.getBlockState(steppingPos);
-//        double d = cameraEntityPos.getX();
-//        double e = cameraEntityPos.getY();
-//        double f = cameraEntityPos.getZ();
-//        VertexConsumerProvider.Immediate immediate = this.bufferBuilders.getEntityVertexConsumers();
-//        VertexConsumer vertexConsumer = immediate.getBuffer(RenderLayer.getLines());
-//        drawBlockOutline(matrices, vertexConsumer, camera.getFocusedEntity(), d, e, f, steppingPos, blockState);
     }
 
 }
