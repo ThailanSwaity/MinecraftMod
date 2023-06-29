@@ -31,9 +31,9 @@ public class AutoTotem extends Hack implements Tickable {
             return;
         }
 
-        ExampleMod.LOGGER.info("Has totem?: " + (hasTotem() ? "true" : "false"));
-        ExampleMod.LOGGER.info("Totem slot: " + getTotemSlot());
-        ExampleMod.LOGGER.info("Off hand: " + client.player.getOffHandStack().getItem().getName());
+//        ExampleMod.LOGGER.info("Has totem?: " + (hasTotem() ? "true" : "false"));
+//        ExampleMod.LOGGER.info("Totem slot: " + getTotemSlot());
+//        ExampleMod.LOGGER.info("Off hand: " + client.player.getOffHandStack().getItem().getName());
 
         PlayerInventory inventory = client.player.getInventory();
         if (client.player.playerScreenHandler == client.player.playerScreenHandler) {
