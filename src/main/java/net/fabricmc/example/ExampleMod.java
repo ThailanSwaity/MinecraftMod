@@ -81,6 +81,7 @@ public class ExampleMod implements ModInitializer {
 		additionManager.add(new EntityTp(client));
 		additionManager.add(new KillAura(client));
 		additionManager.add(new Reach(client));
+		additionManager.add(new AutoTotem(client));
 		playerCoordinateDisplay = new PlayerCoordinateDisplay(client);
 		additionManager.add(playerCoordinateDisplay);
 		spawnCoordinateDisplay = new SpawnCoordinateDisplay(client);
