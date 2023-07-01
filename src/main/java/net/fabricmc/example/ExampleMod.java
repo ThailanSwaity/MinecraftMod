@@ -7,14 +7,19 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FireBlock;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.AbstractClientPlayerEntity;
+import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ExampleMod implements ModInitializer {
 	// This logger is used to write text to the console and the log file.
@@ -23,6 +28,7 @@ public class ExampleMod implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger("modid");
 	private static KeyBinding keyBinding_r;
 	private static KeyBinding keyBinding_y;
+	private static KeyBinding keyBinding_g;
 	private static ExampleMod instance;
 	public MinecraftClient client;
 	public static FullBright fullBright;
@@ -49,6 +55,7 @@ public class ExampleMod implements ModInitializer {
 	public static ChestESP chestESP;
 	public static ChatWatermark chatWatermark;
 	public static FriendList friendList;
+	public static Surround surround;
 	public AdditionManager additionManager = new AdditionManager();
 	public static ExampleMod getInstance() {
 		return instance;
@@ -72,6 +79,13 @@ public class ExampleMod implements ModInitializer {
 				"Teleport",
 				InputUtil.Type.KEYSYM,
 				GLFW.GLFW_KEY_Y,
+				"Hacks"
+		));
+
+		keyBinding_g = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+				"Surround",
+				InputUtil.Type.KEYSYM,
+				GLFW.GLFW_KEY_G,
 				"Hacks"
 		));
 
@@ -118,6 +132,8 @@ public class ExampleMod implements ModInitializer {
 		additionManager.add(portalTracers);
 		chestESP = new ChestESP();
 		additionManager.add(chestESP);
+		surround = new Surround(client);
+		additionManager.add(surround);
 		xray = new Xray(client);
 		xray.addBlocksORE(
 				Blocks.STONE,
@@ -175,6 +191,12 @@ public class ExampleMod implements ModInitializer {
 			}
 		});
 
+		ClientTickEvents.END_CLIENT_TICK.register(client1 -> {
+			while (keyBinding_g.wasPressed()) {
+				surround.trigger();
+			}
+		});
+
 		commandList.register("obama", (args) -> {
 			client.player.sendMessage(Text.literal("Oh no no no"));
 		});
@@ -198,9 +220,36 @@ public class ExampleMod implements ModInitializer {
 			if (friendList.isEmpty()) {
 				client.player.sendMessage(Text.literal("Friend list is empty."));
 			} else {
+				List<AbstractClientPlayerEntity> players = client.world.getPlayers();
 				client.player.sendMessage(Text.literal("Friend list:"));
-				for (String name : friendNames) client.player.sendMessage(Text.literal("\t" + name));
+				for (String name : friendNames) {
+					PlayerListEntry playerListEntry = client.player.networkHandler.getPlayerListEntry(name);
+					if (playerListEntry != null) {
+						client.player.sendMessage(Text.literal("\t" + name).formatted(Formatting.GREEN));
+					} else client.player.sendMessage(Text.literal("\t" + name));
+				}
 			}
+		});
+
+		commandList.register("surround", (args) -> {
+			if (args[0] != null) {
+				try {
+					int tickDelay = Integer.parseInt(args[0]);
+					surround.setTickDelay(tickDelay);
+					client.player.sendMessage(Text.literal("Surround tickDelay set to " + tickDelay));
+				} catch (NumberFormatException e) {
+					client.player.sendMessage(Text.literal("First argument must be an integer!").formatted(Formatting.RED));
+				}
+			}
+		});
+
+		commandList.register("watermark", (args) -> {
+			String watermark = "";
+			for (int i = 0; i < args.length; i++) {
+				watermark += args[i];
+				if (i != args.length) watermark += " ";
+			}
+			chatWatermark.set(watermark);
 		});
 
 		LOGGER.info("Hello Fabric world!");

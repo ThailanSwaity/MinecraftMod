@@ -27,15 +27,15 @@ public abstract class ChatScreenMixin {
     private void sendMessage(String chatText, boolean addToHistory, CallbackInfoReturnable<Boolean> cir) {
 
         boolean isCommand = ExampleMod.commandList.process(chatText);
-        if (isCommand) cir.setReturnValue(true);
+        if (isCommand) {
+            cir.setReturnValue(true);
+            return;
+        }
 
         if (ExampleMod.chatWatermark.isEnabled()) {
             MinecraftClient client = ExampleMod.getInstance().client;
 
-
-
-            chatText = normalize(chatText + " | TʜᴀɪFᴏᴏᴅ Cʟɪᴇɴᴛ");
-
+            chatText = normalize(chatText + ExampleMod.chatWatermark.getWaterMark());
 
             if (chatText.isEmpty()) {
                 cir.setReturnValue(true);

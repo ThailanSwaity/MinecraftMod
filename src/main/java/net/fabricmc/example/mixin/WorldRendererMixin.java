@@ -36,17 +36,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(WorldRenderer.class)
 public abstract class WorldRendererMixin {
 
-    @Shadow public abstract void drawEntityOutlinesFramebuffer();
-
-    @Shadow @Final private BufferBuilderStorage bufferBuilders;
-
-    @Shadow protected abstract void drawBlockOutline(MatrixStack matrices, VertexConsumer vertexConsumer, Entity entity, double cameraX, double cameraY, double cameraZ, BlockPos pos, BlockState state);
-
     @Shadow @Nullable private ClientWorld world;
-
-    @Shadow protected abstract void checkEmpty(MatrixStack matrices);
-
-    @Shadow @Final private Int2ObjectMap<BlockBreakingInfo> blockBreakingInfos;
 
     @Inject(at = @At("HEAD"), method = "renderWeather", cancellable = true)
     private void renderWeather(CallbackInfo ci) {
@@ -62,7 +52,11 @@ public abstract class WorldRendererMixin {
         if (ExampleMod.detectPlayers.isEnabled()) {
             for (Entity entity : world.getEntities()) {
                 if (entity instanceof PlayerEntity && entity != camera.getFocusedEntity()) {
-                    Renderer.drawLine(cursorPosition.getX(), cursorPosition.getY(), cursorPosition.getZ(), entity.getX(), entity.getY(), entity.getZ(), 1f, Colour.RED);
+                    if (ExampleMod.friendList.isFriend(entity.getName().getString())) {
+                        Renderer.drawLine(cursorPosition.getX(), cursorPosition.getY(), cursorPosition.getZ(), entity.getX(), entity.getY(), entity.getZ(), 1f, Colour.BLUE);
+                    } else {
+                        Renderer.drawLine(cursorPosition.getX(), cursorPosition.getY(), cursorPosition.getZ(), entity.getX(), entity.getY(), entity.getZ(), 1f, Colour.RED);
+                    }
                 }
             }
         }
