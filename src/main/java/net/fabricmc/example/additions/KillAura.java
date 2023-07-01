@@ -1,5 +1,6 @@
 package net.fabricmc.example.additions;
 
+import net.fabricmc.example.ExampleMod;
 import net.fabricmc.example.Tickable;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.client.MinecraftClient;
@@ -58,6 +59,9 @@ public class KillAura extends Hack implements Tickable {
                 return;
             }
             if (entity instanceof PlayerEntity && (mode == PLAYERS || mode == PLAYERS_AND_HOSTILES)) {
+                if (ExampleMod.friendList.isEnabled()) {
+                    if (ExampleMod.friendList.isFriend(entity.getEntityName())) return;
+                }
                 client.interactionManager.attackEntity(client.player, entity);
                 return;
             }

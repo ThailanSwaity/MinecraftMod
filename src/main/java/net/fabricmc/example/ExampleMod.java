@@ -5,6 +5,7 @@ import net.fabricmc.example.additions.*;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.FireBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
@@ -12,6 +13,8 @@ import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
 
 public class ExampleMod implements ModInitializer {
 	// This logger is used to write text to the console and the log file.
@@ -39,10 +42,13 @@ public class ExampleMod implements ModInitializer {
 	public static ChunkTracking chunkTracking;
 	public static NoWeather noWeather;
 	public static DetectPlayers detectPlayers;
+
+	public static CommandList commandList = new CommandList();
 	public static ChestTracers chestTracers;
 	public static PortalTracers portalTracers;
 	public static ChestESP chestESP;
 	public static ChatWatermark chatWatermark;
+	public static FriendList friendList;
 	public AdditionManager additionManager = new AdditionManager();
 	public static ExampleMod getInstance() {
 		return instance;
@@ -100,6 +106,8 @@ public class ExampleMod implements ModInitializer {
 		additionManager.add(fullBright);
 		chatWatermark = new ChatWatermark();
 		additionManager.add(chatWatermark);
+		friendList = new FriendList();
+		additionManager.add(friendList);
 		noWeather = new NoWeather();
 		additionManager.add(noWeather);
 		detectPlayers = new DetectPlayers(client);
@@ -164,6 +172,34 @@ public class ExampleMod implements ModInitializer {
 			while (keyBinding_y.wasPressed()) {
 				teleport.teleportToCursor(100);
 				client1.player.sendMessage(Text.literal("Tried to teleport"), false);
+			}
+		});
+
+		commandList.register("obama", (args) -> {
+			client.player.sendMessage(Text.literal("Oh no no no"));
+		});
+
+		commandList.register("add", (args) -> {
+			for (String name : args) {
+				boolean success = friendList.addFriend(name);
+				client.player.sendMessage(Text.literal(success ? name + " added as a friend." : name + " is already a friend."));
+			}
+		});
+
+		commandList.register("remove", (args) -> {
+			for (String name : args) {
+				boolean success = friendList.removeFriend(name);
+				client.player.sendMessage(Text.literal(success ? "Removed " + name + " from friends list." : name + " is not in your friends list."));
+			}
+		});
+
+		commandList.register("friends", (args) -> {
+			ArrayList<String> friendNames = friendList.getFriends();
+			if (friendList.isEmpty()) {
+				client.player.sendMessage(Text.literal("Friend list is empty."));
+			} else {
+				client.player.sendMessage(Text.literal("Friend list:"));
+				for (String name : friendNames) client.player.sendMessage(Text.literal("\t" + name));
 			}
 		});
 
