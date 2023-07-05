@@ -49,7 +49,7 @@ public class KillAura extends Hack implements Tickable {
             if (entity instanceof MobEntity) {
                 if (((MobEntity)entity).getHealth() <= 0) continue;
             }
-            if (entity == null) return;
+            if (entity == null) continue;
             if (entity instanceof Monster && (mode == HOSTILES || mode == HOSTILES_AND_PASSIVES || mode == PLAYERS_AND_HOSTILES)) {
                 client.interactionManager.attackEntity(client.player, entity);
                 return;
@@ -60,7 +60,7 @@ public class KillAura extends Hack implements Tickable {
             }
             if (entity instanceof PlayerEntity && (mode == PLAYERS || mode == PLAYERS_AND_HOSTILES)) {
                 if (ExampleMod.friendList.isEnabled()) {
-                    if (ExampleMod.friendList.isFriend(entity.getEntityName())) return;
+                    if (ExampleMod.friendList.isFriend(entity.getEntityName())) continue;
                 }
                 client.interactionManager.attackEntity(client.player, entity);
                 return;

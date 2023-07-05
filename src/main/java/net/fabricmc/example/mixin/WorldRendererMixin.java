@@ -83,8 +83,14 @@ public abstract class WorldRendererMixin {
         }
         if (ExampleMod.waypoints.isEnabled()) {
             MinecraftClient client = ExampleMod.getInstance().client;
-            for (WaypointList.Waypoint waypoint : ExampleMod.waypointList.getWaypoints()) {
-                Renderer.drawLine(cursorPosition.getX(), cursorPosition.getY(), cursorPosition.getZ(), waypoint.getPosition().getX(), waypoint.getPosition().getY(), waypoint.getPosition().getZ(), 1f, waypoint.getColour());
+            for (Waypoint waypoint : ExampleMod.waypointList.getWaypoints()) {
+                if (waypoint.getDimension() == null) {
+                    Renderer.drawLine(cursorPosition.getX(), cursorPosition.getY(), cursorPosition.getZ(), waypoint.getPosition().getX(), waypoint.getPosition().getY(), waypoint.getPosition().getZ(), 1f, waypoint.getColour());
+                } else {
+                    if (client.world.getDimensionKey() == waypoint.getDimension()) {
+                        Renderer.drawLine(cursorPosition.getX(), cursorPosition.getY(), cursorPosition.getZ(), waypoint.getPosition().getX(), waypoint.getPosition().getY(), waypoint.getPosition().getZ(), 1f, waypoint.getColour());
+                    }
+                }
             }
         }
     }

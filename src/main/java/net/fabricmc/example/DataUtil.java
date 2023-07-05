@@ -33,7 +33,7 @@ public class DataUtil {
 
     public static boolean saveServerWaypoints(WaypointList waypointList, String serverAddress) {
         String data = "";
-        for (WaypointList.Waypoint waypoint : waypointList.getWaypoints()) {
+        for (Waypoint waypoint : waypointList.getWaypoints()) {
             data += waypoint.toString() + "\n";
         }
         ExampleMod.LOGGER.info(data);
@@ -47,38 +47,9 @@ public class DataUtil {
         if (data == null) return;
         String[] lines = data.split("\n");
 
-        String wName;
-        String wCoords;
-        String wColour;
-
-        Vec3d pos;
-        Colour colour;
-
         for (String line : lines) {
-            String[] split = line.split(":");
-            wName = split[0].trim();
-            wCoords = split[1].replace("(", "").replace(")", "").replace(" ", "");
-            wColour = split[2].replace(" ", "");
-
-            try {
-                String[] temp = wCoords.split(",");
-                double x = Double.parseDouble(temp[0]);
-                double y = Double.parseDouble(temp[1]);
-                double z = Double.parseDouble(temp[2]);
-
-                pos = new Vec3d(x, y, z);
-
-                temp = wColour.split(",");
-                float r = Float.parseFloat(temp[0]);
-                float g = Float.parseFloat(temp[1]);
-                float b = Float.parseFloat(temp[2]);
-                colour = new Colour(r, g, b);
-
-                waypointList.addWaypoint(pos, wName, null, colour);
-            } catch (NumberFormatException e) {
-                System.out.println("An error occurred while parsing the waypoint");
-                e.printStackTrace();
-            }
+            Waypoint waypoint = new Waypoint(line);
+            if (waypoint.getPosition() != null) waypointList.addWaypoint(waypoint);
         }
     }
 

@@ -25,6 +25,8 @@ import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.apache.commons.lang3.math.NumberUtils.isNumber;
+
 public class ExampleMod implements ModInitializer {
 	// This logger is used to write text to the console and the log file.
 	// It is considered best practice to use your mod id as the logger's name.
@@ -273,11 +275,25 @@ public class ExampleMod implements ModInitializer {
 			for (int i = 0; i < args.length; i++) LOGGER.info("args " + i + ": " + args[i]);
 			if (args.length == 1) {
 				if (args[0].equalsIgnoreCase("add")) {
-					WaypointList.Waypoint waypoint = waypointList.addWaypoint(client.player.getPos(), client.world.getDimensionKey(), Colour.PURPLE);
+					Waypoint waypoint = waypointList.addWaypoint(client.player.getPos(), client.world.getDimensionKey(), Colour.CORAL);
 					client.player.sendMessage(Text.literal(waypoint.toString()).formatted(Formatting.GREEN));
 				}
 			} else if (args.length > 1) {
+
+				// .waypoint add(String name)
 				if (args[0].equalsIgnoreCase("add")) {
+					if (args.length > 2 && !CommandUtil.isNumber(args[1])) {
+						String name = "";
+						for (int i = 1; i < args.length; i++) {
+							name += args[i];
+							if (i != args.length) name += " ";
+						}
+						Waypoint waypoint = waypointList.addWaypoint(new Vec3d(client.player.getX(), client.player.getY(), client.player.getZ()), name, client.world.getDimensionKey(), Colour.CORAL);
+						client.player.sendMessage(Text.literal(waypoint.toString()).formatted(Formatting.GREEN));
+						return;
+					}
+
+					// .waypoint add(double x, double y, double z, String name)
 					try {
 						double x = Double.parseDouble(args[1]);
 						double y = Double.parseDouble(args[2]);
@@ -288,20 +304,23 @@ public class ExampleMod implements ModInitializer {
 								name += args[i];
 								if (i != args.length) name += " ";
 							}
-							WaypointList.Waypoint waypoint = waypointList.addWaypoint(new Vec3d(x, y, z), name, client.world.getDimensionKey(), Colour.PURPLE);
+							Waypoint waypoint = waypointList.addWaypoint(new Vec3d(x, y, z), name, client.world.getDimensionKey(), Colour.CORAL);
 							client.player.sendMessage(Text.literal(waypoint.toString()).formatted(Formatting.GREEN));
 						} else {
-							WaypointList.Waypoint waypoint = waypointList.addWaypoint(new Vec3d(x, y, z), client.world.getDimensionKey(), Colour.PURPLE);
+							Waypoint waypoint = waypointList.addWaypoint(new Vec3d(x, y, z), client.world.getDimensionKey(), Colour.CORAL);
 							client.player.sendMessage(Text.literal(waypoint.toString()).formatted(Formatting.GREEN));
 						}
 					} catch (NumberFormatException e) {
 						client.player.sendMessage(Text.literal("Incorrect syntax").formatted(Formatting.RED));
 					}
 				} else if (args[0].equalsIgnoreCase("remove")) {
+
+					// .waypoint remove all
 					if (args[1].equalsIgnoreCase("all")) {
 						waypointList.clear();
 						client.player.sendMessage(Text.literal("Removed all waypoints."));
 					} else {
+						// .waypoint remove(int n)
 						try {
 							int n = Integer.parseInt(args[1]);
 							waypointList.remove(n);
