@@ -9,15 +9,19 @@ import net.minecraft.block.FireBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.PlayerListEntry;
+import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.math.Vec3d;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.xml.crypto.Data;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,6 +60,9 @@ public class ExampleMod implements ModInitializer {
 	public static ChatWatermark chatWatermark;
 	public static FriendList friendList;
 	public static Surround surround;
+
+	public static Waypoints waypoints;
+	public static WaypointList waypointList = new WaypointList();
 	public AdditionManager additionManager = new AdditionManager();
 	public static ExampleMod getInstance() {
 		return instance;
@@ -134,6 +141,8 @@ public class ExampleMod implements ModInitializer {
 		additionManager.add(chestESP);
 		surround = new Surround(client);
 		additionManager.add(surround);
+		waypoints = new Waypoints();
+		additionManager.add(waypoints);
 		xray = new Xray(client);
 		xray.addBlocksORE(
 				Blocks.STONE,
@@ -201,21 +210,23 @@ public class ExampleMod implements ModInitializer {
 			client.player.sendMessage(Text.literal("Oh no no no"));
 		});
 
-		commandList.register("add", (args) -> {
+		commandList.register("add", "add friends to your friends list.", (args) -> {
 			for (String name : args) {
 				boolean success = friendList.addFriend(name);
 				client.player.sendMessage(Text.literal(success ? name + " added as a friend." : name + " is already a friend."));
 			}
+			DataUtil.saveFriendsList(friendList);
 		});
 
-		commandList.register("remove", (args) -> {
+		commandList.register("remove", "remove friends from your friends list.", (args) -> {
 			for (String name : args) {
 				boolean success = friendList.removeFriend(name);
 				client.player.sendMessage(Text.literal(success ? "Removed " + name + " from friends list." : name + " is not in your friends list."));
 			}
+			DataUtil.saveFriendsList(friendList);
 		});
 
-		commandList.register("friends", (args) -> {
+		commandList.register("friends", "show your friends list", (args) -> {
 			ArrayList<String> friendNames = friendList.getFriends();
 			if (friendList.isEmpty()) {
 				client.player.sendMessage(Text.literal("Friend list is empty."));
@@ -231,7 +242,7 @@ public class ExampleMod implements ModInitializer {
 			}
 		});
 
-		commandList.register("surround", (args) -> {
+		commandList.register("surround", "change the tickDelay of surround", (args) -> {
 			if (args[0] != null) {
 				try {
 					int tickDelay = Integer.parseInt(args[0]);
@@ -243,7 +254,7 @@ public class ExampleMod implements ModInitializer {
 			}
 		});
 
-		commandList.register("watermark", (args) -> {
+		commandList.register("watermark", "edit the chat watermark", (args) -> {
 			String watermark = "";
 			for (int i = 0; i < args.length; i++) {
 				watermark += args[i];
@@ -251,6 +262,72 @@ public class ExampleMod implements ModInitializer {
 			}
 			chatWatermark.set(watermark);
 		});
+
+		commandList.register("help", "display all commands", (args) -> {
+			ArrayList<String> list = commandList.getCommands();
+			for (String command : list) client.player.sendMessage(Text.literal(command));
+		});
+
+		commandList.register("waypoint", "add a waypoint", (args) -> {
+			client.player.sendMessage(Text.literal(args.length + "").formatted(Formatting.GREEN));
+			for (int i = 0; i < args.length; i++) LOGGER.info("args " + i + ": " + args[i]);
+			if (args.length == 1) {
+				if (args[0].equalsIgnoreCase("add")) {
+					WaypointList.Waypoint waypoint = waypointList.addWaypoint(client.player.getPos(), client.world.getDimensionKey(), Colour.PURPLE);
+					client.player.sendMessage(Text.literal(waypoint.toString()).formatted(Formatting.GREEN));
+				}
+			} else if (args.length > 3) {
+				if (args[0].equalsIgnoreCase("add")) {
+					try {
+						double x = Double.parseDouble(args[1]);
+						double y = Double.parseDouble(args[2]);
+						double z = Double.parseDouble(args[3]);
+						if (args.length >= 4) {
+							String name = "";
+							for (int i = 4; i < args.length; i++) {
+								name += args[i];
+								if (i != args.length) name += " ";
+							}
+							WaypointList.Waypoint waypoint = waypointList.addWaypoint(new Vec3d(x, y, z), name, client.world.getDimensionKey(), Colour.PURPLE);
+							client.player.sendMessage(Text.literal(waypoint.toString()).formatted(Formatting.GREEN));
+						} else {
+							WaypointList.Waypoint waypoint = waypointList.addWaypoint(new Vec3d(x, y, z), client.world.getDimensionKey(), Colour.PURPLE);
+							client.player.sendMessage(Text.literal(waypoint.toString()).formatted(Formatting.GREEN));
+						}
+					} catch (NumberFormatException e) {
+						client.player.sendMessage(Text.literal("Incorrect syntax").formatted(Formatting.RED));
+					}
+				} else if (args[0].equalsIgnoreCase("remove")) {
+					if (args[1].equalsIgnoreCase("all")) {
+						waypointList.clear();
+					}
+				}
+			}
+		});
+
+		commandList.register("waypoints", "lists waypoints", (args) -> {
+			for (WaypointList.Waypoint waypoint : waypointList.getWaypoints()) {
+				client.player.sendMessage(Text.literal(waypoint.toString()));
+			}
+		});
+
+		commandList.register("test", (args) -> {
+			if (client.getNetworkHandler().getServerInfo() != null) {
+				ServerInfo serverInfo = client.getNetworkHandler().getServerInfo();
+				client.player.sendMessage(Text.literal(serverInfo.name).formatted(Formatting.BOLD));
+				client.player.sendMessage(Text.literal(serverInfo.address));
+			}
+		});
+
+		commandList.register("save", (args) -> {
+			if (client.getNetworkHandler().getServerInfo() != null) {
+				DataUtil.saveServerWaypoints(waypointList, client.getNetworkHandler().getServerInfo().address);
+			}
+		});
+
+		ArrayList<String> friends = DataUtil.loadFriendsList();
+		friendList.setFriends(friends);
+		LOGGER.info("Loaded friends list");
 
 		LOGGER.info("Hello Fabric world!");
 	}

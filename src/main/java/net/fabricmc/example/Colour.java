@@ -30,4 +30,9 @@ public class Colour {
         return b;
     }
 
+    @Override
+    public String toString() {
+        return r + ", " + g + ", " + b;
+    }
+
 }

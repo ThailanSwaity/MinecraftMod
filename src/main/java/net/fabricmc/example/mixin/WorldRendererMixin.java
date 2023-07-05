@@ -1,10 +1,7 @@
 package net.fabricmc.example.mixin;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import net.fabricmc.example.Colour;
-import net.fabricmc.example.ExampleMod;
-import net.fabricmc.example.Renderer;
-import net.fabricmc.example.WorldUtil;
+import net.fabricmc.example.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.NetherPortalBlock;
@@ -82,6 +79,12 @@ public abstract class WorldRendererMixin {
                 chunk.forEachBlockMatchingPredicate((blockState) -> blockState.getBlock() == Blocks.NETHER_PORTAL || blockState.getBlock() == Blocks.END_PORTAL, (blockPos, blockState) -> {
                     Renderer.drawLine(cursorPosition.getX(), cursorPosition.getY(), cursorPosition.getZ(), blockPos.getX() + 0.5f, blockPos.getY() + 0.5f, blockPos.getZ() + 0.5f, 1f, Colour.PURPLE);
                 });
+            }
+        }
+        if (ExampleMod.waypoints.isEnabled()) {
+            MinecraftClient client = ExampleMod.getInstance().client;
+            for (WaypointList.Waypoint waypoint : ExampleMod.waypointList.getWaypoints()) {
+                Renderer.drawLine(cursorPosition.getX(), cursorPosition.getY(), cursorPosition.getZ(), waypoint.getPosition().getX(), waypoint.getPosition().getY(), waypoint.getPosition().getZ(), 1f, waypoint.getColour());
             }
         }
     }

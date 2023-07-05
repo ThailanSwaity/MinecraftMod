@@ -1,5 +1,6 @@
 package net.fabricmc.example.additions;
 
+import net.fabricmc.example.DataUtil;
 import net.minecraft.entity.player.PlayerEntity;
 
 import java.util.ArrayList;
@@ -40,6 +41,10 @@ public class FriendList extends Hack {
         text = text.replace(".add ", "");
         text = text.replace(".remove ", "");
         return text.split(" ");
+    }
+
+    public void setFriends(ArrayList<String> friends) {
+        this.friends = friends;
     }
 
 }

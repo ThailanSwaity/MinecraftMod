@@ -12,10 +12,15 @@ public class CommandList {
         ExampleMod.LOGGER.info("Registered command " + command);
     }
 
+    public void register(String command, String description, Consumer<String[]> consumer) {
+        commandList.add(new Command(command, description, consumer));
+        ExampleMod.LOGGER.info("Registered command " + command);
+    }
+
     public boolean process(String text) {
         if (text.charAt(0) != '.') return false;
         String commandName = text.split(" ")[0].replace(".", "");
-        String[] args = text.replace("." + commandName + " ", "").split(" ");
+        String[] args = text.replace("." + commandName + " ", "").replace("." + commandName, "").split(" ");
         for (Command command : commandList) {
             if (command.match(commandName)) {
                 command.trigger(args);
@@ -25,9 +30,18 @@ public class CommandList {
         return false;
     }
 
+    public ArrayList<String> getCommands() {
+        ArrayList<String> list = new ArrayList<>();
+        for (Command command : commandList) {
+            list.add(command.toString());
+        }
+        return list;
+    }
+
     private class Command {
 
         private String command;
+        private String description;
         private Consumer<String[]> consumer;
 
         public Command(String command, Consumer<String[]> consumer) {
@@ -35,8 +49,17 @@ public class CommandList {
             this.consumer = consumer;
         }
 
+        public Command(String command, String description, Consumer<String[]> consumer) {
+            this.command = command;
+            this.description = description;
+            this.consumer = consumer;
+        }
+
         public String getName() {
             return command;
+        }
+        public String getDescription() {
+            return description;
         }
 
         public boolean match(String commandName) {
@@ -45,6 +68,11 @@ public class CommandList {
 
         public void trigger(String[] args) {
             consumer.accept(args);
+        }
+
+        @Override
+        public String toString() {
+            return command + " | " + description;
         }
 
     }
