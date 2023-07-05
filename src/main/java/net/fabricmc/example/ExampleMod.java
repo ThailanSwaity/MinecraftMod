@@ -269,14 +269,14 @@ public class ExampleMod implements ModInitializer {
 		});
 
 		commandList.register("waypoint", "add a waypoint", (args) -> {
-			client.player.sendMessage(Text.literal(args.length + "").formatted(Formatting.GREEN));
+			//client.player.sendMessage(Text.literal(args.length + "").formatted(Formatting.GREEN));
 			for (int i = 0; i < args.length; i++) LOGGER.info("args " + i + ": " + args[i]);
 			if (args.length == 1) {
 				if (args[0].equalsIgnoreCase("add")) {
 					WaypointList.Waypoint waypoint = waypointList.addWaypoint(client.player.getPos(), client.world.getDimensionKey(), Colour.PURPLE);
 					client.player.sendMessage(Text.literal(waypoint.toString()).formatted(Formatting.GREEN));
 				}
-			} else if (args.length > 3) {
+			} else if (args.length > 1) {
 				if (args[0].equalsIgnoreCase("add")) {
 					try {
 						double x = Double.parseDouble(args[1]);
@@ -300,14 +300,27 @@ public class ExampleMod implements ModInitializer {
 				} else if (args[0].equalsIgnoreCase("remove")) {
 					if (args[1].equalsIgnoreCase("all")) {
 						waypointList.clear();
+						client.player.sendMessage(Text.literal("Removed all waypoints."));
+					} else {
+						try {
+							int n = Integer.parseInt(args[1]);
+							waypointList.remove(n);
+							client.player.sendMessage(Text.literal("Removed waypoint " + n));
+						} catch (NumberFormatException e) {
+							client.player.sendMessage(Text.literal("Syntax error. Second argument must be an integer.").formatted(Formatting.RED));
+						}
 					}
 				}
 			}
 		});
 
 		commandList.register("waypoints", "lists waypoints", (args) -> {
-			for (WaypointList.Waypoint waypoint : waypointList.getWaypoints()) {
-				client.player.sendMessage(Text.literal(waypoint.toString()));
+			if (waypointList.size() == 0) {
+				client.player.sendMessage(Text.literal("There are currently no waypoints."));
+				return;
+			}
+			for (int i = 0; i < waypointList.size(); i++) {
+				client.player.sendMessage(Text.literal(i + ": " + waypointList.getWaypoints().get(i)));
 			}
 		});
 
@@ -322,6 +335,14 @@ public class ExampleMod implements ModInitializer {
 		commandList.register("save", (args) -> {
 			if (client.getNetworkHandler().getServerInfo() != null) {
 				DataUtil.saveServerWaypoints(waypointList, client.getNetworkHandler().getServerInfo().address);
+				client.player.sendMessage(Text.literal("Saved waypoints for " + client.getNetworkHandler().getServerInfo().address));
+			}
+		});
+
+		commandList.register("load", (args) -> {
+			if (client.getNetworkHandler().getServerInfo() != null) {
+				DataUtil.loadServerWaypoints(waypointList, client.getNetworkHandler().getServerInfo().address);
+				client.player.sendMessage(Text.literal("Loaded waypoints for " + client.getNetworkHandler().getServerInfo().address));
 			}
 		});
 

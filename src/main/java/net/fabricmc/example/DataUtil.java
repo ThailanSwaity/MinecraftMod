@@ -37,13 +37,14 @@ public class DataUtil {
             data += waypoint.toString() + "\n";
         }
         ExampleMod.LOGGER.info(data);
-        return saveData(serverAddress.replace(".", "_").replace(":", "_") + ".txt", "waypoints", data);
+        return saveData(serverAddress.replace(".", "_").replace(":", "_") + ".txt", "thaifoodclient/waypoints", data);
     }
 
     public static void loadServerWaypoints(WaypointList waypointList, String serverAddress) {
         String filename = serverAddress.replace(".", "_").replace(":", "_");
-        String data = loadData("waypoits/" + filename);
+        String data = loadData("thaifoodclient/waypoints/" + filename + ".txt");
 
+        if (data == null) return;
         String[] lines = data.split("\n");
 
         String wName;

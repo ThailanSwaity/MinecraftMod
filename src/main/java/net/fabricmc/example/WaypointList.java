@@ -32,10 +32,18 @@ public class WaypointList {
         return waypoint;
     }
 
+    public int size() {
+        return waypoints.size();
+    }
+
     public Waypoint addWaypoint(Vec3d position, String name, RegistryKey<DimensionType> dimension, Colour colour) {
         Waypoint waypoint = new Waypoint(position, name, dimension, colour);
         waypoints.add(waypoint);
         return waypoint;
+    }
+
+    public void remove(int n) {
+        waypoints.remove(n);
     }
 
     public void addWaypoint(Waypoint waypoint) {
