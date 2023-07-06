@@ -21,7 +21,7 @@ public class DetectPlayers extends Hack {
         ArrayList<Text> players = new ArrayList<>();
         for (Entity entity : client.world.getEntities()) {
             if (entity instanceof PlayerEntity && entity != client.player) {
-                players.add(Text.literal(entity.getName().getString() + " " + getEntityCoordsAsString(entity) + ", " + getDistance(entity)));
+                players.add(Text.literal(entity.getName().getString() + ": " + getDistance(entity)));
             }
         }
         return players;

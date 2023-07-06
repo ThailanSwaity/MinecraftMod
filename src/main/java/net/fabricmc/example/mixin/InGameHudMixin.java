@@ -2,6 +2,9 @@ package net.fabricmc.example.mixin;
 
 import net.fabricmc.example.ExampleMod;
 import net.fabricmc.example.Renderer;
+import net.fabricmc.example.additions.Hack;
+import net.fabricmc.example.additions.KillAura;
+import net.fabricmc.example.additions.Xray;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
@@ -46,13 +49,36 @@ public abstract class InGameHudMixin {
         if (ExampleMod.chunkTracking.isEnabled()) {
             context.drawTextWithShadow(getTextRenderer(), "Chunk age: " + ExampleMod.chunkTracking.playerChunkAge(), 0, 0, 0xFFFFFF);
         }
+        int i = 0;
+        if (ExampleMod.hacksOverlay.isEnabled()) {
+            context.drawTextWithShadow(getTextRenderer(), "TʜᴀɪFᴏᴏᴅ Cʟɪᴇɴᴛ", 3, 3, 0xFFFFF);
+            for (Hack hack : ExampleMod.getInstance().additionManager.getAdditions()) {
+                if (hack.isEnabled()) {
+                    if (hack.getName().equalsIgnoreCase("armourhud") ||
+                            hack.getName().equalsIgnoreCase("detectplayers") ||
+                            hack.getName().equalsIgnoreCase("playercoordinatedisplay") ||
+                            hack.getName().equalsIgnoreCase("teleport") ||
+                            hack.getName().equalsIgnoreCase("hacksoverlay")) continue;
+                    i++;
+                    if (hack instanceof KillAura || hack instanceof Xray) {
+                        context.drawTextWithShadow(getTextRenderer(), hack.toString(), 3, i * 10 + 13, 0xFFFFF);
+                    } else {
+                        context.drawTextWithShadow(getTextRenderer(), hack.getName(), 3, i * 10 + 13, 0xFFFFF);
+                    }
+
+                }
+            }
+            i++;
+        }
         if (ExampleMod.detectPlayers.isEnabled()) {
-            context.drawTextWithShadow(getTextRenderer(), "Nearby Players:", 3, 0, 0xFFFFFF);
+            context.drawTextWithShadow(getTextRenderer(), "Nearby Players:", 3, i * 10 + (ExampleMod.hacksOverlay.isEnabled() ? 13 : 3), 0xFFFFFF);
             ArrayList<Text> players = ExampleMod.detectPlayers.getNearbyPlayers();
-            for (int i = 0; i < players.size(); i++) {
-                context.drawTextWithShadow(getTextRenderer(), players.get(i), 3, i * 13 + 13, 0xFFFFFF);
+            for (int j = 0; j < players.size(); j++) {
+                i++;
+                context.drawTextWithShadow(getTextRenderer(), players.get(i), 3, i * 10 + 13, 0xFFFFFF);
             }
         }
+
     }
 
     @Inject(at = @At("TAIL"), method = "renderHotbar")

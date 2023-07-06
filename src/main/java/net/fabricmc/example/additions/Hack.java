@@ -3,6 +3,8 @@ package net.fabricmc.example.additions;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import java.util.ArrayList;
+
 public abstract class Hack {
 
     private boolean enabled = false;

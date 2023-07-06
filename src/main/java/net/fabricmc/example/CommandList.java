@@ -19,6 +19,7 @@ public class CommandList {
 
     public boolean process(String text) {
         if (text.charAt(0) != '.') return false;
+        ExampleMod.getInstance().client.inGameHud.getChatHud().addToMessageHistory(text);
         String commandName = text.split(" ")[0].replace(".", "");
         String[] args = text.replace("." + commandName + " ", "").replace("." + commandName, "").split(" ");
         for (Command command : commandList) {

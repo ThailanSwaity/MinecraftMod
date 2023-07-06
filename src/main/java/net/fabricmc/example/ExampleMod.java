@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.xml.crypto.Data;
+import javax.xml.transform.sax.SAXResult;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +63,8 @@ public class ExampleMod implements ModInitializer {
 	public static ChatWatermark chatWatermark;
 	public static FriendList friendList;
 	public static Surround surround;
-
+	public static Sarcasm sarcasm;
+	public static HacksOverlay hacksOverlay;
 	public static Waypoints waypoints;
 	public static WaypointList waypointList = new WaypointList();
 	public AdditionManager additionManager = new AdditionManager();
@@ -143,8 +145,13 @@ public class ExampleMod implements ModInitializer {
 		additionManager.add(chestESP);
 		surround = new Surround(client);
 		additionManager.add(surround);
+		sarcasm = new Sarcasm();
+		additionManager.add(sarcasm);
+		additionManager.add(new AutoForward(client));
 		waypoints = new Waypoints();
 		additionManager.add(waypoints);
+		hacksOverlay = new HacksOverlay();
+		additionManager.add(hacksOverlay);
 		xray = new Xray(client);
 		xray.addBlocksORE(
 				Blocks.STONE,
@@ -191,7 +198,6 @@ public class ExampleMod implements ModInitializer {
 		ClientTickEvents.END_CLIENT_TICK.register(client1 -> {
 			while (keyBinding_r.wasPressed()) {
 				xray.cycle();
-				client1.player.sendMessage(Text.literal(xray.toString()), false);
 			}
 		});
 
