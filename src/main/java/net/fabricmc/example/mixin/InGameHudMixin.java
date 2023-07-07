@@ -75,7 +75,7 @@ public abstract class InGameHudMixin {
             ArrayList<Text> players = ExampleMod.detectPlayers.getNearbyPlayers();
             for (int j = 0; j < players.size(); j++) {
                 i++;
-                context.drawTextWithShadow(getTextRenderer(), players.get(i), 3, i * 10 + 13, 0xFFFFFF);
+                context.drawTextWithShadow(getTextRenderer(), players.get(j), 3, i * 10 + 13, 0xFFFFFF);
             }
         }
 

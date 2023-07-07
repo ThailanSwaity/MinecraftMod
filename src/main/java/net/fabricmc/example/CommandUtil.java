@@ -9,4 +9,13 @@ public class CommandUtil {
         return true;
     }
 
+    public static boolean isDouble(String value) {
+        try {
+            double test = Double.parseDouble(value);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
 }

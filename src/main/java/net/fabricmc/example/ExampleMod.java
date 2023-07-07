@@ -11,6 +11,7 @@ import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.option.KeyBinding;
+import net.minecraft.client.util.GlAllocationUtils;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.text.Text;
@@ -55,17 +56,14 @@ public class ExampleMod implements ModInitializer {
 	public static ChunkTracking chunkTracking;
 	public static NoWeather noWeather;
 	public static DetectPlayers detectPlayers;
-
 	public static CommandList commandList = new CommandList();
-	public static ChestTracers chestTracers;
-	public static PortalTracers portalTracers;
-	public static ChestESP chestESP;
 	public static ChatWatermark chatWatermark;
 	public static FriendList friendList;
 	public static Surround surround;
 	public static Sarcasm sarcasm;
 	public static HacksOverlay hacksOverlay;
 	public static Waypoints waypoints;
+	public static Glasses glasses;
 	public static WaypointList waypointList = new WaypointList();
 	public AdditionManager additionManager = new AdditionManager();
 	public static ExampleMod getInstance() {
@@ -135,14 +133,17 @@ public class ExampleMod implements ModInitializer {
 		additionManager.add(friendList);
 		noWeather = new NoWeather();
 		additionManager.add(noWeather);
+
+		// Rendering
 		detectPlayers = new DetectPlayers(client);
 		additionManager.add(detectPlayers);
-		chestTracers = new ChestTracers();
-		additionManager.add(chestTracers);
-		portalTracers = new PortalTracers();
-		additionManager.add(portalTracers);
-		chestESP = new ChestESP();
-		additionManager.add(chestESP);
+		additionManager.add(new ChestTracers());
+		additionManager.add(new ShriekerESP());
+		additionManager.add(new PortalTracers());
+		additionManager.add(new ShulkerESP());
+		additionManager.add(new SignESP());
+		additionManager.add(new ChestESP());
+
 		surround = new Surround(client);
 		additionManager.add(surround);
 		sarcasm = new Sarcasm();
@@ -150,6 +151,9 @@ public class ExampleMod implements ModInitializer {
 		additionManager.add(new AutoForward(client));
 		waypoints = new Waypoints();
 		additionManager.add(waypoints);
+		glasses = new Glasses();
+		additionManager.add(glasses);
+
 		hacksOverlay = new HacksOverlay();
 		additionManager.add(hacksOverlay);
 		xray = new Xray(client);
@@ -182,7 +186,7 @@ public class ExampleMod implements ModInitializer {
 
 		additionManager.add(xray);
 
-		// Teleporter is not a hack;
+		// Teleporter is not a hack (HAHA funny);
 		teleport = new Teleport(client);
 		teleport.setDistance(10);
 		additionManager.add(teleport);
@@ -288,7 +292,9 @@ public class ExampleMod implements ModInitializer {
 
 				// .waypoint add(String name)
 				if (args[0].equalsIgnoreCase("add")) {
-					if (args.length > 2 && !CommandUtil.isNumber(args[1])) {
+					LOGGER.info(args[1]);
+					LOGGER.info("Is it a number?" + CommandUtil.isDouble(args[1]));
+					if (args.length > 2 && !CommandUtil.isDouble(args[1])) {
 						String name = "";
 						for (int i = 1; i < args.length; i++) {
 							name += args[i];

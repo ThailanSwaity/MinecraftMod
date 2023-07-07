@@ -1,34 +1,27 @@
 package net.fabricmc.example.mixin;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.fabricmc.example.*;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.NetherPortalBlock;
+import net.fabricmc.example.additions.Hack;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.ChestBlockEntity;
 import net.minecraft.block.entity.EnderChestBlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.*;
-import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.profiler.Profiler;
 import net.minecraft.world.chunk.WorldChunk;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(WorldRenderer.class)
 public abstract class WorldRendererMixin {
@@ -39,6 +32,14 @@ public abstract class WorldRendererMixin {
     private void renderWeather(CallbackInfo ci) {
         if (ExampleMod.noWeather.isEnabled()) {
             ci.cancel();
+        }
+    }
+
+    @Inject(at = @At("HEAD"), method = "hasBlindnessOrDarkness", cancellable = true)
+    private void hasBlindnessOrDarkness(Camera camera, CallbackInfoReturnable<Boolean> cir) {
+        if (ExampleMod.glasses.isEnabled()) {
+            cir.setReturnValue(false);
+            cir.cancel();
         }
     }
 
@@ -57,30 +58,21 @@ public abstract class WorldRendererMixin {
                 }
             }
         }
-        if (ExampleMod.chestTracers.isEnabled() || ExampleMod.chestESP.isEnabled()) {
-            for (BlockEntity blockEntity : WorldUtil.getBlockEntities()) {
-                BlockPos pos = blockEntity.getPos();
-                if (blockEntity instanceof ChestBlockEntity) {
-                    if (ExampleMod.chestTracers.isEnabled())
-                        Renderer.drawLine(cursorPosition.getX(), cursorPosition.getY(), cursorPosition.getZ(), pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f, 1f, Colour.GREEN);
-                    if (ExampleMod.chestESP.isEnabled()) {
-                        Renderer.drawBoxOutline(pos, Colour.LIGHT_BLUE, 1f);
-                    }
-                } else if (blockEntity instanceof EnderChestBlockEntity) {
-                    if (ExampleMod.chestTracers.isEnabled())
-                        Renderer.drawLine(cursorPosition.getX(), cursorPosition.getY(), cursorPosition.getZ(), pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f, 1f, Colour.GREEN);
-                    if (ExampleMod.chestESP.isEnabled())
-                        Renderer.drawBoxOutline(pos, Colour.PURPLE, 1f);
-                }
+
+        for (BlockEntity blockEntity : WorldUtil.getBlockEntities()) {
+            for (Hack blockEntityDetector : ExampleMod.getInstance().additionManager.getBlockEntityDetectors()) {
+                if (!blockEntityDetector.isEnabled()) continue;
+                if (((BlockEntityDetector)blockEntityDetector).isBlockEntity(blockEntity)) ((BlockEntityDetector)blockEntityDetector).blockEntityResponse(camera, blockEntity);
             }
         }
-        if (ExampleMod.portalTracers.isEnabled()) {
-            for (WorldChunk chunk : WorldUtil.getLoadedChunks()) {
-                chunk.forEachBlockMatchingPredicate((blockState) -> blockState.getBlock() == Blocks.NETHER_PORTAL || blockState.getBlock() == Blocks.END_PORTAL, (blockPos, blockState) -> {
-                    Renderer.drawLine(cursorPosition.getX(), cursorPosition.getY(), cursorPosition.getZ(), blockPos.getX() + 0.5f, blockPos.getY() + 0.5f, blockPos.getZ() + 0.5f, 1f, Colour.PURPLE);
-                });
+
+        for (WorldChunk chunk : WorldUtil.getLoadedChunks()) {
+            for (Hack blockDetector : ExampleMod.getInstance().additionManager.getBlockDetectors()) {
+                if (!blockDetector.isEnabled()) continue;
+                chunk.forEachBlockMatchingPredicate((blockState) -> ((BlockDetector)blockDetector).isBlock(blockState), ((BlockDetector)blockDetector).blockResponse(camera));
             }
         }
+
         if (ExampleMod.waypoints.isEnabled()) {
             MinecraftClient client = ExampleMod.getInstance().client;
             for (Waypoint waypoint : ExampleMod.waypointList.getWaypoints()) {
