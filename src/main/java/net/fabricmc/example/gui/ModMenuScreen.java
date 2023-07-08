@@ -33,7 +33,7 @@ public class ModMenuScreen extends Screen {
     private void initWidgets() {
         GridWidget gridWidget = new GridWidget();
         gridWidget.getMainPositioner().margin(4, 4, 4, 0);
-        GridWidget.Adder adder = gridWidget.createAdder(3);
+        GridWidget.Adder adder = gridWidget.createAdder(4);
 
         ArrayList<Hack> hackList = ExampleMod.getInstance().additionManager.getAdditions();
         hackList.forEach(hack -> {
@@ -41,7 +41,7 @@ public class ModMenuScreen extends Screen {
                 if (hack instanceof Xray) ((Xray) hack).cycle();
                 else hack.toggle();
                 button.setMessage(hack.getString());
-            }, 130, 20);
+            }, 115, 20);
             adder.add(buttonWidget);
         });
 
@@ -50,11 +50,11 @@ public class ModMenuScreen extends Screen {
                 button -> {
                     ExampleMod.teleport.teleport();
                 }
-        ).size(130, 20).build();
+        ).size(115, 20).build();
 
         adder.add(teleportButton);
 
-        SliderWidget teleportDistanceSlider = new SliderWidget(0, 0, 130, 20, Text.literal("Tp " + ExampleMod.teleport.getDistance() + " blocks"), ((double)ExampleMod.teleport.getDistance() / 100)) {
+        SliderWidget teleportDistanceSlider = new SliderWidget(0, 0, 115, 20, Text.literal("Tp " + ExampleMod.teleport.getDistance() + " blocks"), ((double)ExampleMod.teleport.getDistance() / 100)) {
             @Override
             protected void updateMessage() {
                 setMessage(Text.literal("Tp " + (int)(value * 100) + " blocks"));
@@ -67,7 +67,7 @@ public class ModMenuScreen extends Screen {
             }
         };
 
-        SliderWidget speedMineSlider = new SliderWidget(0, 0, 130, 20, Text.literal(String.format("%.2f", ExampleMod.speedMine.getTriggerChance())), ExampleMod.speedMine.getTriggerChance()) {
+        SliderWidget speedMineSlider = new SliderWidget(0, 0, 115, 20, Text.literal(String.format("%.2f", ExampleMod.speedMine.getTriggerChance())), ExampleMod.speedMine.getTriggerChance()) {
             @Override
             protected void updateMessage() {
                 setMessage(Text.literal(String.format("%.2f", value)));
@@ -79,7 +79,7 @@ public class ModMenuScreen extends Screen {
             }
         };
 
-        SliderWidget flySpeedSlider = new SliderWidget(0, 0, 130, 20, Text.literal(String.format("%.2f", ExampleMod.fly.getFlySpeed())), ExampleMod.fly.getFlySpeed()) {
+        SliderWidget flySpeedSlider = new SliderWidget(0, 0, 115, 20, Text.literal(String.format("%.2f", ExampleMod.fly.getFlySpeed())), ExampleMod.fly.getFlySpeed()) {
             @Override
             protected void updateMessage() {
                 setMessage(Text.literal(String.format("%.2f", value)));
