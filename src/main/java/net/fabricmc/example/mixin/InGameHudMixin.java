@@ -81,6 +81,13 @@ public abstract class InGameHudMixin {
 
     }
 
+    @Inject(at = @At("HEAD"), method = "renderPortalOverlay", cancellable = true)
+    private void renderPortalOverlay(DrawContext context, float nauseaStrength, CallbackInfo ci) {
+        if (ExampleMod.betterPortal.isEnabled()) {
+            ci.cancel();
+        }
+    }
+
     @Inject(at = @At("TAIL"), method = "renderHotbar")
     private void renderHotbar(float tickDelta, DrawContext context, CallbackInfo ci) {
         if (ExampleMod.armourHUD.isEnabled()) {

@@ -64,6 +64,7 @@ public class ExampleMod implements ModInitializer {
 	public static HacksOverlay hacksOverlay;
 	public static Waypoints waypoints;
 	public static Glasses glasses;
+	public static BetterPortal betterPortal;
 	public static WaypointList waypointList = new WaypointList();
 	public AdditionManager additionManager = new AdditionManager();
 	public static ExampleMod getInstance() {
@@ -153,6 +154,8 @@ public class ExampleMod implements ModInitializer {
 		additionManager.add(waypoints);
 		glasses = new Glasses();
 		additionManager.add(glasses);
+		betterPortal = new BetterPortal(client);
+		additionManager.add(betterPortal);
 
 		hacksOverlay = new HacksOverlay();
 		additionManager.add(hacksOverlay);
