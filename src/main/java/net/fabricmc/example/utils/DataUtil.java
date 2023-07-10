@@ -1,5 +1,8 @@
-package net.fabricmc.example;
+package net.fabricmc.example.utils;
 
+import net.fabricmc.example.ExampleMod;
+import net.fabricmc.example.Waypoint;
+import net.fabricmc.example.WaypointList;
 import net.fabricmc.example.additions.FriendList;
 import net.fabricmc.example.additions.Waypoints;
 import net.minecraft.util.math.Vec3d;

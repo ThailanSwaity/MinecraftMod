@@ -2,16 +2,14 @@ package net.fabricmc.example.mixin;
 
 import net.fabricmc.example.*;
 import net.fabricmc.example.additions.Hack;
+import net.fabricmc.example.utils.WorldUtil;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.ChestBlockEntity;
-import net.minecraft.block.entity.EnderChestBlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.chunk.WorldChunk;
 import org.jetbrains.annotations.Nullable;
@@ -47,15 +45,11 @@ public abstract class WorldRendererMixin {
     private void render(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, CallbackInfo ci) {
         Vec3d viewVec = camera.getFocusedEntity().getRotationVec(0.5f);
         Vec3d cursorPosition = camera.getPos().add(viewVec);
-        if (ExampleMod.detectPlayers.isEnabled()) {
-            for (Entity entity : world.getEntities()) {
-                if (entity instanceof PlayerEntity && entity != camera.getFocusedEntity()) {
-                    if (ExampleMod.friendList.isFriend(entity.getName().getString())) {
-                        Renderer.drawLine(cursorPosition.getX(), cursorPosition.getY(), cursorPosition.getZ(), entity.getX(), entity.getY(), entity.getZ(), 1f, Colour.BLUE);
-                    } else {
-                        Renderer.drawLine(cursorPosition.getX(), cursorPosition.getY(), cursorPosition.getZ(), entity.getX(), entity.getY(), entity.getZ(), 1f, Colour.RED);
-                    }
-                }
+
+        for (Entity entity : world.getEntities()) {
+            for (Hack entityDetector : ExampleMod.getInstance().additionManager.getEntityDetectors()) {
+                if (!entityDetector.isEnabled()) continue;
+                if (((EntityDetector)entityDetector).isEntity(entity)) ((EntityDetector)entityDetector).entityResponse(entity, camera);
             }
         }
 

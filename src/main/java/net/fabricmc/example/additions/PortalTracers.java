@@ -11,9 +11,13 @@ import net.minecraft.util.math.Vec3d;
 
 import java.util.function.BiConsumer;
 
-public class PortalTracers extends Hack implements BlockDetector {
+public class PortalTracers extends RenderedHack implements BlockDetector {
     public PortalTracers() {
         super("PortalTracers");
+    }
+    public PortalTracers(Hack parentHack) {
+        this();
+        this.parentHack = parentHack;
     }
 
     @Override
@@ -26,7 +30,7 @@ public class PortalTracers extends Hack implements BlockDetector {
         Vec3d viewVec = camera.getFocusedEntity().getRotationVec(0.5f);
         Vec3d cursorPosition = camera.getPos().add(viewVec);
         return ((blockPos, blockState) -> {
-            Renderer.drawLine(cursorPosition.getX(), cursorPosition.getY(), cursorPosition.getZ(), blockPos.getX() + 0.5f, blockPos.getY() + 0.5f, blockPos.getZ() + 0.5f, 1f, Colour.PURPLE);
+            Renderer.drawLine(cursorPosition.getX(), cursorPosition.getY(), cursorPosition.getZ(), blockPos.getX() + 0.5f, blockPos.getY() + 0.5f, blockPos.getZ() + 0.5f, lineWidth, alpha, Colour.PURPLE);
         });
     }
 }

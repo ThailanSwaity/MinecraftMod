@@ -1,15 +1,13 @@
 package net.fabricmc.example.additions;
 
-import net.fabricmc.example.ExampleMod;
 import net.fabricmc.example.Tickable;
-import net.fabricmc.example.additions.Hack;
+import net.fabricmc.example.additions.variable.VariableHack;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 
-public class SpeedMine extends Hack implements Tickable {
+public class SpeedMine extends VariableHack implements Tickable {
 
     private int maxCoolDown = 15;
     private double triggerChance = 0.1;
@@ -18,6 +16,10 @@ public class SpeedMine extends Hack implements Tickable {
     public SpeedMine(MinecraftClient client) {
         super("SpeedMine");
         this.client = client;
+        optionsScreen.addOptionSlider(Text.literal(String.format("%.2f", triggerChance)),
+                (sliderWidget, value) -> sliderWidget.setMessage(Text.literal(String.format("%.2f", value))),
+                (sliderWidget, value) -> setTriggerChance(value), 0, 0, 115, 20, getTriggerChance()
+        );
     }
 
     public void tick() {

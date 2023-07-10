@@ -5,6 +5,7 @@ import net.fabricmc.example.Renderer;
 import net.fabricmc.example.additions.Hack;
 import net.fabricmc.example.additions.KillAura;
 import net.fabricmc.example.additions.Xray;
+import net.fabricmc.example.utils.WorldUtil;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
@@ -70,9 +71,9 @@ public abstract class InGameHudMixin {
             }
             i++;
         }
-        if (ExampleMod.detectPlayers.isEnabled()) {
+        if (ExampleMod.tracers.isDetectingPlayers()) {
             context.drawTextWithShadow(getTextRenderer(), "Nearby Players:", 3, i * 10 + (ExampleMod.hacksOverlay.isEnabled() ? 13 : 3), 0xFFFFFF);
-            ArrayList<Text> players = ExampleMod.detectPlayers.getNearbyPlayers();
+            ArrayList<Text> players = WorldUtil.getNearbyPlayers();
             for (int j = 0; j < players.size(); j++) {
                 i++;
                 context.drawTextWithShadow(getTextRenderer(), players.get(j), 3, i * 10 + 13, 0xFFFFFF);

@@ -12,10 +12,14 @@ import net.minecraft.util.math.BlockPos;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-public class SignESP extends Hack implements BlockDetector, BlockEntityDetector {
+public class SignESP extends RenderedHack implements BlockDetector, BlockEntityDetector {
 
     public SignESP() {
         super("SignESP");
+    }
+    public SignESP(Hack parentHack) {
+        this();
+        this.parentHack = parentHack;
     }
 
     @Override
@@ -36,7 +40,7 @@ public class SignESP extends Hack implements BlockDetector, BlockEntityDetector 
     @Override
     public BiConsumer<BlockPos, BlockState> blockResponse(Camera camera) {
         return ((blockPos, blockState) -> {
-            Renderer.drawBoxOutline(blockPos, Colour.GREEN, 1f);
+            Renderer.drawBoxOutline(blockPos, Colour.GREEN, lineWidth, alpha);
         });
     }
 

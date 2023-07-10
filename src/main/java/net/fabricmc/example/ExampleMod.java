@@ -2,18 +2,21 @@ package net.fabricmc.example;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.example.additions.*;
+import net.fabricmc.example.additions.variable.ESP;
+import net.fabricmc.example.additions.variable.Fly;
+import net.fabricmc.example.additions.variable.Tracers;
+import net.fabricmc.example.gui.ModMenuScreen;
+import net.fabricmc.example.utils.CommandUtil;
+import net.fabricmc.example.utils.DataUtil;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.FireBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.GlAllocationUtils;
 import net.minecraft.client.util.InputUtil;
-import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.Vec3d;
@@ -21,19 +24,17 @@ import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.xml.crypto.Data;
-import javax.xml.transform.sax.SAXResult;
-import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.apache.commons.lang3.math.NumberUtils.isNumber;
 
 public class ExampleMod implements ModInitializer {
 	// This logger is used to write text to the console and the log file.
 	// It is considered best practice to use your mod id as the logger's name.
 	// That way, it's clear which mod wrote info, warnings, and errors.
 	public static final Logger LOGGER = LoggerFactory.getLogger("modid");
+
+	public static ModMenuScreen modMenuScreen;
+
 	private static KeyBinding keyBinding_r;
 	private static KeyBinding keyBinding_y;
 	private static KeyBinding keyBinding_g;
@@ -55,7 +56,7 @@ public class ExampleMod implements ModInitializer {
 	public static EntityNames entityNames;
 	public static ChunkTracking chunkTracking;
 	public static NoWeather noWeather;
-	public static DetectPlayers detectPlayers;
+	public static Tracers tracers;
 	public static CommandList commandList = new CommandList();
 	public static ChatWatermark chatWatermark;
 	public static FriendList friendList;
@@ -102,63 +103,58 @@ public class ExampleMod implements ModInitializer {
 		client = MinecraftClient.getInstance();
 
 		autoRespawn = new AutoRespawn();
-		additionManager.add(autoRespawn);
+		additionManager.addDisplay(autoRespawn);
 		fly = new Fly(client);
-		additionManager.add(fly);
-		additionManager.add(new NoFallDamage(client));
-		additionManager.add(new BoatFly(client));
-		additionManager.add(new AutoEat(client));
-		additionManager.add(new EntityTp(client));
-		additionManager.add(new KillAura(client));
-		additionManager.add(new Reach(client));
-		additionManager.add(new AutoTotem(client));
+		additionManager.addDisplay(new ESP());
+		additionManager.addDisplay(fly);
+		additionManager.addDisplay(new NoFallDamage(client));
+		additionManager.addDisplay(new BoatFly(client));
+		additionManager.addDisplay(new AutoEat(client));
+		additionManager.addDisplay(new EntityTp(client));
+		additionManager.addDisplay(new KillAura(client));
+		additionManager.addDisplay(new Reach(client));
+		additionManager.addDisplay(new AutoTotem(client));
 		playerCoordinateDisplay = new PlayerCoordinateDisplay(client);
-		additionManager.add(playerCoordinateDisplay);
+		additionManager.addDisplay(playerCoordinateDisplay);
 		spawnCoordinateDisplay = new SpawnCoordinateDisplay(client);
-		additionManager.add(spawnCoordinateDisplay);
+		additionManager.addDisplay(spawnCoordinateDisplay);
 		entityNames = new EntityNames();
-		additionManager.add(entityNames);
+		additionManager.addDisplay(entityNames);
 		entityControl = new EntityControl(client);
-		additionManager.add(entityControl);
+		additionManager.addDisplay(entityControl);
 		deathCoordinateDisplay = new DeathCoordinateDisplay(client);
-		additionManager.add(deathCoordinateDisplay);
+		additionManager.addDisplay(deathCoordinateDisplay);
 		chunkTracking = new ChunkTracking(client);
-		additionManager.add(chunkTracking);
+		additionManager.addDisplay(chunkTracking);
 		armourHUD = new ArmourHUD();
-		additionManager.add(armourHUD);
+		additionManager.addDisplay(armourHUD);
 		fullBright = new FullBright();
-		additionManager.add(fullBright);
+		additionManager.addDisplay(fullBright);
 		chatWatermark = new ChatWatermark();
-		additionManager.add(chatWatermark);
+		additionManager.addDisplay(chatWatermark);
 		friendList = new FriendList();
-		additionManager.add(friendList);
+		additionManager.addDisplay(friendList);
 		noWeather = new NoWeather();
-		additionManager.add(noWeather);
+		additionManager.addDisplay(noWeather);
 
 		// Rendering
-		detectPlayers = new DetectPlayers(client);
-		additionManager.add(detectPlayers);
-		additionManager.add(new ChestTracers());
-		additionManager.add(new ShriekerESP());
-		additionManager.add(new PortalTracers());
-		additionManager.add(new ShulkerESP());
-		additionManager.add(new SignESP());
-		additionManager.add(new ChestESP());
+		tracers = new Tracers(client);
+		additionManager.addDisplay(tracers);
 
 		surround = new Surround(client);
-		additionManager.add(surround);
+		additionManager.addDisplay(surround);
 		sarcasm = new Sarcasm();
-		additionManager.add(sarcasm);
-		additionManager.add(new AutoForward(client));
+		additionManager.addDisplay(sarcasm);
+		additionManager.addDisplay(new AutoForward(client));
 		waypoints = new Waypoints();
-		additionManager.add(waypoints);
+		additionManager.addDisplay(waypoints);
 		glasses = new Glasses();
-		additionManager.add(glasses);
+		additionManager.addDisplay(glasses);
 		betterPortal = new BetterPortal(client);
-		additionManager.add(betterPortal);
+		additionManager.addDisplay(betterPortal);
 
 		hacksOverlay = new HacksOverlay();
-		additionManager.add(hacksOverlay);
+		additionManager.addDisplay(hacksOverlay);
 		xray = new Xray(client);
 		xray.addBlocksORE(
 				Blocks.STONE,
@@ -187,20 +183,20 @@ public class ExampleMod implements ModInitializer {
 				Blocks.INFESTED_COBBLESTONE
 		);
 
-		additionManager.add(xray);
+		additionManager.addDisplay(xray);
 
 		// Teleporter is not a hack (HAHA funny);
 		teleport = new Teleport(client);
 		teleport.setDistance(10);
-		additionManager.add(teleport);
+		additionManager.addDisplay(teleport);
 
-		additionManager.add(new AutoCrop(client));
+		additionManager.addDisplay(new AutoCrop(client));
 		autoFish = new AutoFish(client);
-		additionManager.add(autoFish);
+		additionManager.addDisplay(autoFish);
 		autoBridge = new AutoBridge(client);
-		additionManager.add(autoBridge);
+		additionManager.addDisplay(autoBridge);
 		speedMine = new SpeedMine(client);
-		additionManager.add(speedMine);
+		additionManager.addDisplay(speedMine);
 
 		ClientTickEvents.END_CLIENT_TICK.register(client1 -> {
 			while (keyBinding_r.wasPressed()) {

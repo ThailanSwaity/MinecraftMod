@@ -1,7 +1,7 @@
 package net.fabricmc.example.additions;
 
 import net.fabricmc.example.Tickable;
-import net.fabricmc.example.WorldUtil;
+import net.fabricmc.example.utils.WorldUtil;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 

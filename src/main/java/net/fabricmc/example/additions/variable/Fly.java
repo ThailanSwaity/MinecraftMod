@@ -1,14 +1,14 @@
-package net.fabricmc.example.additions;
+package net.fabricmc.example.additions.variable;
 
-import net.fabricmc.example.ExampleMod;
 import net.fabricmc.example.PacketHelper;
 import net.fabricmc.example.Tickable;
+import net.fabricmc.example.additions.variable.VariableHack;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
+import net.minecraft.text.Text;
 
-public class Fly extends Hack implements Tickable {
+public class Fly extends VariableHack implements Tickable {
 
     private MinecraftClient client;
     private ClientPlayerEntity player;
@@ -18,6 +18,10 @@ public class Fly extends Hack implements Tickable {
     public Fly(MinecraftClient client) {
         super("Fly");
         this.client = client;
+        this.optionsScreen.addOptionSlider(Text.literal(String.format("%.2f", flySpeed)),
+                (sliderWidget, value) -> sliderWidget.setMessage(Text.literal(String.format("%.2f", value))),
+                (sliderWidget, value) -> setFlySpeed((float)value), 0, 0, 115, 20, flySpeed
+        );
     }
 
     public void tick() {

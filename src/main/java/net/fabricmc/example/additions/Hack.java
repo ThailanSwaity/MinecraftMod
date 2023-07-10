@@ -9,9 +9,14 @@ public abstract class Hack {
 
     private boolean enabled = false;
     protected String name = "";
+    protected Hack parentHack;
 
     public Hack(String name) {
         this.name = name;
+    }
+    public Hack(String name, Hack parentHack) {
+        this(name);
+        this.parentHack = parentHack;
     }
 
     public String toString() {
@@ -47,6 +52,13 @@ public abstract class Hack {
     }
 
     public boolean isEnabled() {
+        if (getParent() != null) {
+            return enabled && getParent().isEnabled();
+        }
+        return enabled;
+    }
+
+    public boolean localEnabled() {
         return enabled;
     }
 
@@ -55,8 +67,12 @@ public abstract class Hack {
     }
 
     public Text getString() {
-        if (!isEnabled()) return Text.literal(toString());
+        if (!localEnabled()) return Text.literal(toString());
         return Text.literal(toString()).formatted(Formatting.GREEN);
+    }
+
+    public Hack getParent() {
+        return parentHack;
     }
 
 }

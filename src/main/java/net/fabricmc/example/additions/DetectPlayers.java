@@ -1,14 +1,20 @@
 package net.fabricmc.example.additions;
 
+import net.fabricmc.example.Colour;
+import net.fabricmc.example.EntityDetector;
+import net.fabricmc.example.ExampleMod;
+import net.fabricmc.example.Renderer;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.Camera;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.math.Vec3d;
 
 import java.util.ArrayList;
 
-public class DetectPlayers extends Hack {
+public class DetectPlayers extends RenderedHack implements EntityDetector {
 
     private MinecraftClient client;
 
@@ -17,14 +23,9 @@ public class DetectPlayers extends Hack {
         this.client = client;
     }
 
-    public ArrayList<Text> getNearbyPlayers() {
-        ArrayList<Text> players = new ArrayList<>();
-        for (Entity entity : client.world.getEntities()) {
-            if (entity instanceof PlayerEntity && entity != client.player) {
-                players.add(Text.literal(entity.getName().getString() + ": " + getDistance(entity)));
-            }
-        }
-        return players;
+    public DetectPlayers(MinecraftClient client, Hack parentHack) {
+        this(client);
+        this.parentHack = parentHack;
     }
 
     public String getEntityCoordsAsString(Entity entity) {
@@ -43,4 +44,19 @@ public class DetectPlayers extends Hack {
         return Formatting.AQUA;
     }
 
+    @Override
+    public boolean isEntity(Entity entity) {
+        return entity instanceof PlayerEntity && entity != client.player;
+    }
+
+    @Override
+    public void entityResponse(Entity entity, Camera camera) {
+        Vec3d viewVec = camera.getFocusedEntity().getRotationVec(0.5f);
+        Vec3d cursorPosition = camera.getPos().add(viewVec);
+        if (ExampleMod.friendList.isFriend(entity.getName().getString())) {
+            Renderer.drawLine(cursorPosition.getX(), cursorPosition.getY(), cursorPosition.getZ(), entity.getX(), entity.getY(), entity.getZ(), lineWidth, alpha, Colour.BLUE);
+        } else {
+            Renderer.drawLine(cursorPosition.getX(), cursorPosition.getY(), cursorPosition.getZ(), entity.getX(), entity.getY(), entity.getZ(), lineWidth, alpha, Colour.RED);
+        }
+    }
 }

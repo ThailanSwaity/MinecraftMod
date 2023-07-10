@@ -11,10 +11,14 @@ import net.minecraft.util.math.BlockPos;
 
 import java.util.function.BiConsumer;
 
-public class ShulkerESP extends Hack implements BlockDetector {
+public class ShulkerESP extends RenderedHack implements BlockDetector {
 
     public ShulkerESP() {
         super("ShulkerESP");
+    }
+    public ShulkerESP(Hack parentHack) {
+        this();
+        this.parentHack = parentHack;
     }
 
     @Override
@@ -25,7 +29,8 @@ public class ShulkerESP extends Hack implements BlockDetector {
     @Override
     public BiConsumer<BlockPos, BlockState> blockResponse(Camera camera) {
         return ((blockPos, blockState) -> {
-            Renderer.drawBoxOutline(blockPos, Colour.CORAL, 1f);
+            Renderer.drawBoxOutline(blockPos, Colour.CORAL, lineWidth, alpha);
         });
     }
+
 }

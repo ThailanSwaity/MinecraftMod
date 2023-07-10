@@ -1,5 +1,6 @@
 package net.fabricmc.example.mixin;
 
+import net.fabricmc.example.ExampleMod;
 import net.fabricmc.example.gui.ModMenuScreen;
 import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.screen.Screen;
@@ -24,8 +25,8 @@ public abstract class GameMenuScreenMixin extends Screen {
 
     @Inject(at = @At("TAIL"), method = "initWidgets()V")
     public void initWidgets(CallbackInfo ci) {
-        ModMenuScreen modMenuScreen = new ModMenuScreen(Text.literal("TʜᴀɪFᴏᴏᴅ Cʟɪᴇɴᴛ"), this);
-        ButtonWidget.Builder builder = ButtonWidget.builder(Text.literal("TʜᴀɪFᴏᴏᴅ Cʟɪᴇɴᴛ"), button -> this.client.setScreen(modMenuScreen));
+        ExampleMod.modMenuScreen = new ModMenuScreen(Text.literal("TʜᴀɪFᴏᴏᴅ Cʟɪᴇɴᴛ"), this);
+        ButtonWidget.Builder builder = ButtonWidget.builder(Text.literal("TʜᴀɪFᴏᴏᴅ Cʟɪᴇɴᴛ"), button -> this.client.setScreen(ExampleMod.modMenuScreen));
 
 
         addDrawableChild(builder.build());

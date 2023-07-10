@@ -1,4 +1,4 @@
-package net.fabricmc.example;
+package net.fabricmc.example.utils;
 
 public class CommandUtil {
 

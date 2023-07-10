@@ -1,8 +1,11 @@
-package net.fabricmc.example;
+package net.fabricmc.example.utils;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
@@ -50,5 +53,20 @@ public class WorldUtil {
         }
         return false;
     }
+
+    public static ArrayList<Text> getNearbyPlayers() {
+        ArrayList<Text> players = new ArrayList<>();
+        for (Entity entity : client.world.getEntities()) {
+            if (entity instanceof PlayerEntity && entity != client.player) {
+                players.add(Text.literal(entity.getName().getString() + ": " + getDistance(entity)));
+            }
+        }
+        return players;
+    }
+
+    private static String getDistance(Entity entity) {
+        return String.format("%.2f", client.player.distanceTo(entity));
+    }
+
 
 }

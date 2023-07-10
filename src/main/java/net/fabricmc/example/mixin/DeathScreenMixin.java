@@ -3,6 +3,7 @@ package net.fabricmc.example.mixin;
 import com.google.common.collect.Lists;
 import net.fabricmc.example.ExampleMod;
 import net.fabricmc.example.gui.ModMenuScreen;
+import net.fabricmc.example.utils.MenuUtil;
 import net.minecraft.client.gui.screen.DeathScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -28,7 +29,7 @@ public class DeathScreenMixin extends Screen {
     @Inject(at = @At("TAIL"), method="init")
     private void addAutoRespawnButton(CallbackInfo ci) {
         ExampleMod.deathCoordinateDisplay.updateDeath();
-        buttons.add(addDrawableChild(ModMenuScreen.createButtonWidget(
+        buttons.add(addDrawableChild(MenuUtil.createButtonWidget(
                 Text.literal(ExampleMod.autoRespawn.toString()),
                 button -> {
                     ExampleMod.autoRespawn.toggle();
