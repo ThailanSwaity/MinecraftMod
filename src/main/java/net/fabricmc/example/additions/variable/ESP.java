@@ -1,12 +1,12 @@
 package net.fabricmc.example.additions.variable;
 
-import net.fabricmc.example.*;
 import net.fabricmc.example.additions.*;
 import net.minecraft.text.Text;
 
 public class ESP extends VariableHack {
 
     private ChestESP chestESP;
+    private PlayerESP playerESP;
 
     public ESP() {
         super("ESP");
@@ -15,6 +15,10 @@ public class ESP extends VariableHack {
         subHacks.add(new ShriekerESP(this));
         subHacks.add(new ShulkerESP(this));
         subHacks.add(new SignESP(this));
+        subHacks.add(new ItemESP(this));
+        playerESP = new PlayerESP(this);
+        subHacks.add(playerESP);
+        subHacks.add(new EndCrystalESP(this));
 
         initSubHacks();
 
@@ -45,6 +49,10 @@ public class ESP extends VariableHack {
                     }
                 }, 0, 0, 115, 20, chestESP.getAlpha()
         );
+    }
+
+    public boolean isDetectingPlayers() {
+        return playerESP.isEnabled();
     }
 
 }

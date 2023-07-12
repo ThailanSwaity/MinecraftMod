@@ -2,6 +2,7 @@ package net.fabricmc.example.additions.variable;
 
 import net.fabricmc.example.additions.*;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.item.Item;
 import net.minecraft.text.Text;
 
 public class Tracers extends VariableHack {
@@ -14,6 +15,8 @@ public class Tracers extends VariableHack {
         subHacks.add(detectPlayers);
         subHacks.add(new PortalTracers(this));
         subHacks.add(new ChestTracers(this));
+        subHacks.add(new ItemTracers(this));
+        subHacks.add(new EndCrystalTracers(this));
 
         initSubHacks();
 

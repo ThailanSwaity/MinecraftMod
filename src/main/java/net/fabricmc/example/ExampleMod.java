@@ -2,9 +2,7 @@ package net.fabricmc.example;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.example.additions.*;
-import net.fabricmc.example.additions.variable.ESP;
-import net.fabricmc.example.additions.variable.Fly;
-import net.fabricmc.example.additions.variable.Tracers;
+import net.fabricmc.example.additions.variable.*;
 import net.fabricmc.example.gui.ModMenuScreen;
 import net.fabricmc.example.utils.CommandUtil;
 import net.fabricmc.example.utils.DataUtil;
@@ -57,6 +55,7 @@ public class ExampleMod implements ModInitializer {
 	public static ChunkTracking chunkTracking;
 	public static NoWeather noWeather;
 	public static Tracers tracers;
+	public static ESP esp;
 	public static CommandList commandList = new CommandList();
 	public static ChatWatermark chatWatermark;
 	public static FriendList friendList;
@@ -105,8 +104,11 @@ public class ExampleMod implements ModInitializer {
 		autoRespawn = new AutoRespawn();
 		additionManager.addDisplay(autoRespawn);
 		fly = new Fly(client);
-		additionManager.addDisplay(new ESP());
+		esp = new ESP();
+		additionManager.addDisplay(esp);
 		additionManager.addDisplay(fly);
+		additionManager.addDisplay(new Speed(client));
+		//additionManager.addDisplay(new Zoom(client));
 		additionManager.addDisplay(new NoFallDamage(client));
 		additionManager.addDisplay(new BoatFly(client));
 		additionManager.addDisplay(new AutoEat(client));
