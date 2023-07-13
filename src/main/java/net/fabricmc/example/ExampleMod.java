@@ -33,6 +33,11 @@ public class ExampleMod implements ModInitializer {
 
 	public static ModMenuScreen modMenuScreen;
 
+	public static int r = 255;
+	public static int g = 255;
+	public static int b = 255;
+	public static int a = 255;
+
 	private static KeyBinding keyBinding_r;
 	private static KeyBinding keyBinding_y;
 	private static KeyBinding keyBinding_g;

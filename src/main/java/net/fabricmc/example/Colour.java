@@ -33,6 +33,16 @@ public class Colour {
         return b;
     }
 
+    public int getIntR() {
+        return (int)(this.r * 255);
+    }
+    public int getIntG() {
+        return (int)(this.g * 255);
+    }
+    public int getIntB() {
+        return (int)(this.b * 255);
+    }
+
     @Override
     public String toString() {
         return r + ", " + g + ", " + b;

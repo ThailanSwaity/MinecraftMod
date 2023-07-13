@@ -5,6 +5,7 @@ import net.fabricmc.example.additions.Hack;
 import net.fabricmc.example.utils.WorldUtil;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
@@ -26,6 +27,8 @@ public abstract class WorldRendererMixin {
 
     @Shadow @Nullable private ClientWorld world;
 
+    @Shadow private @Nullable Framebuffer entityOutlinesFramebuffer;
+
     @Inject(at = @At("HEAD"), method = "renderWeather", cancellable = true)
     private void renderWeather(CallbackInfo ci) {
         if (ExampleMod.noWeather.isEnabled()) {
@@ -39,6 +42,16 @@ public abstract class WorldRendererMixin {
             cir.setReturnValue(false);
             cir.cancel();
         }
+    }
+
+    @Inject(method = "drawEntityOutlinesFramebuffer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gl/Framebuffer;draw(IIZ)V"))
+    private void preEntityOutlineDraw(CallbackInfo ci) {
+        EntityOutline.setOutlineColour(Colour.DEEP_PINK);
+    }
+
+    @Inject(method = "drawEntityOutlinesFramebuffer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gl/Framebuffer;draw(IIZ)V", shift = At.Shift.AFTER))
+    private void postEntityOutlineDraw(CallbackInfo ci) {
+        EntityOutline.clear();
     }
 
     @Inject(at = @At("TAIL"), method = "render")

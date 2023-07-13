@@ -12,6 +12,7 @@
     "ClientPlayerEntityMixin",
     "DeathScreenMixin",
     "ChatScreenMixin",
+    "FrameBufferMixin",
     "InGameHudMixin",
     "WorldRendererMixin",
     "ClientPlayNetworkHandlerMixin",

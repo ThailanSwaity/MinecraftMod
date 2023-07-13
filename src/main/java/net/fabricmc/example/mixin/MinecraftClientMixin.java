@@ -1,9 +1,12 @@
 package net.fabricmc.example.mixin;
 
+import net.fabricmc.example.Colour;
+import net.fabricmc.example.EntityOutline;
 import net.fabricmc.example.ExampleMod;
-import net.fabricmc.example.additions.PlayerESP;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.passive.ChickenEntity;
+import net.minecraft.entity.passive.CowEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
