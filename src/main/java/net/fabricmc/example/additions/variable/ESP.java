@@ -1,5 +1,6 @@
 package net.fabricmc.example.additions.variable;
 
+import net.fabricmc.example.Colour;
 import net.fabricmc.example.additions.*;
 import net.minecraft.text.Text;
 
@@ -7,6 +8,10 @@ public class ESP extends VariableHack {
 
     private ChestESP chestESP;
     private PlayerESP playerESP;
+
+    private float r = 1;
+    private float g = 1;
+    private float b = 1;
 
     public ESP() {
         super("ESP");
@@ -49,6 +54,40 @@ public class ESP extends VariableHack {
                     }
                 }, 0, 0, 115, 20, chestESP.getAlpha()
         );
+
+        optionsScreen.addOptionSlider(
+                Text.literal("Red: " + String.format("%.2f", r)),
+                (sliderWidget, value) -> {
+                    sliderWidget.setMessage(Text.literal("Red: " + String.format("%.2f", value)));
+                },
+                (sliderWidget, value) -> {
+                    this.r = (float) value;
+                }, 0, 0, 115, 20, this.r
+        );
+
+        optionsScreen.addOptionSlider(
+                Text.literal("Green: " + String.format("%.2f", g)),
+                (sliderWidget, value) -> {
+                    sliderWidget.setMessage(Text.literal("Green: " + String.format("%.2f", value)));
+                },
+                (sliderWidget, value) -> {
+                    this.g = (float) value;
+                }, 0, 0, 115, 20, this.g
+        );
+
+        optionsScreen.addOptionSlider(
+                Text.literal("Blue: " + String.format("%.2f", b)),
+                (sliderWidget, value) -> {
+                    sliderWidget.setMessage(Text.literal("Red: " + String.format("%.2f", value)));
+                },
+                (sliderWidget, value) -> {
+                    this.b = (float) value;
+                }, 0, 0, 115, 20, this.b
+        );
+    }
+
+    public Colour getPlayerOutlineColour() {
+        return new Colour(r, g, b);
     }
 
     public boolean isDetectingPlayers() {

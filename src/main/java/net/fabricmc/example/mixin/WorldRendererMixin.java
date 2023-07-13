@@ -46,7 +46,7 @@ public abstract class WorldRendererMixin {
 
     @Inject(method = "drawEntityOutlinesFramebuffer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gl/Framebuffer;draw(IIZ)V"))
     private void preEntityOutlineDraw(CallbackInfo ci) {
-        EntityOutline.setOutlineColour(Colour.LIGHT_BLUE);
+        EntityOutline.setOutlineColour(ExampleMod.esp.getPlayerOutlineColour());
     }
 
     @Inject(method = "drawEntityOutlinesFramebuffer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gl/Framebuffer;draw(IIZ)V", shift = At.Shift.AFTER))
