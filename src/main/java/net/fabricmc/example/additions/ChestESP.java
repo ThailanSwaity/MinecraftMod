@@ -25,8 +25,12 @@ public class ChestESP extends RenderedHack implements BlockEntityDetector {
 
     @Override
     public void blockEntityResponse(Camera camera, BlockEntity blockEntity) {
-        if (blockEntity instanceof ChestBlockEntity) Renderer.drawBoxOutline(blockEntity.getPos(), Colour.LIGHT_BLUE, lineWidth, alpha);
-        else if (blockEntity instanceof EnderChestBlockEntity) Renderer.drawBoxOutline(blockEntity.getPos(), Colour.PURPLE, lineWidth, alpha);
+        if (blockEntity instanceof ChestBlockEntity) {
+            Renderer.drawBoxBoth(blockEntity.getPos(), Colour.LIGHT_BLUE, lineWidth, alpha);
+        }
+        else if (blockEntity instanceof EnderChestBlockEntity) {
+            Renderer.drawBoxBoth(blockEntity.getPos(), Colour.PURPLE, lineWidth, alpha);
+        }
     }
 
 }

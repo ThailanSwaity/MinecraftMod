@@ -74,6 +74,60 @@ public class Renderer {
         cleanup();
     }
 
+    public static void drawBoxBoth(BlockPos blockPos, Colour colour, float lineWidth, float alpha) {
+        drawBoxFill(blockPos, colour);
+        drawBoxOutline(blockPos, colour, lineWidth, alpha);
+    }
+
+    public static void drawBoxFill(BlockPos blockPos, Colour colour) {
+        drawBoxFill(new Box(blockPos), colour);
+    }
+
+    public static void drawBoxFill(Box box, Colour colour) {
+        setup();
+
+        MatrixStack matrices = matrixForm(box.minX, box.minY, box.minZ);
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder buffer = tessellator.getBuffer();
+
+        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
+
+        buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
+        vertexBoxQuads(matrices, buffer, moveToZero(box), colour);
+        tessellator.draw();
+
+        cleanup();
+    }
+
+    public static void vertexBoxQuads(MatrixStack matrices, VertexConsumer vertexConsumer, Box box, Colour colour) {
+        float x1 = (float) box.minX;
+        float y1 = (float) box.minY;
+        float z1 = (float) box.minZ;
+        float x2 = (float) box.maxX;
+        float y2 = (float) box.maxY;
+        float z2 = (float) box.maxZ;
+
+        vertexQuad(matrices, vertexConsumer, x1, y1, z1, x2, y1, z1, x2, y1, z2, x1, y1, z2, colour);
+        vertexQuad(matrices, vertexConsumer, x1, y1, z2, x1, y2, z2, x1, y2, z1, x1, y1, z1, colour);
+        vertexQuad(matrices, vertexConsumer, x2, y1, z1, x2, y2, z1, x2, y2, z2, x2, y1, z2, colour);
+        vertexQuad(matrices, vertexConsumer, x1, y1, z1, x1, y2, z1, x2, y2, z1, x2, y1, z1, colour);
+        vertexQuad(matrices, vertexConsumer, x2, y1, z2, x2, y2, z2, x1, y2, z2, x1, y1, z2, colour);
+        vertexQuad(matrices, vertexConsumer, x1, y2, z2, x2, y2, z2, x2, y2, z1, x1, y2, z1, colour);
+    }
+
+    public static void vertexQuad(MatrixStack matrices, VertexConsumer vertexConsumer, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float x4, float y4, float z4, Colour colour) {
+        vertexConsumer.vertex(matrices.peek().getPositionMatrix(), x1, y1, z1).color(colour.getR(), colour.getG(), colour.getB(), 0.2F).next();
+        vertexConsumer.vertex(matrices.peek().getPositionMatrix(), x2, y2, z2).color(colour.getR(), colour.getG(), colour.getB(), 0.2F).next();
+        vertexConsumer.vertex(matrices.peek().getPositionMatrix(), x3, y3, z3).color(colour.getR(), colour.getG(), colour.getB(), 0.2F).next();
+        vertexConsumer.vertex(matrices.peek().getPositionMatrix(), x4, y4, z4).color(colour.getR(), colour.getG(), colour.getB(), 0.2F).next();
+
+        vertexConsumer.vertex(matrices.peek().getPositionMatrix(), x4, y4, z4).color(colour.getR(), colour.getG(), colour.getB(), 0.2F).next();
+        vertexConsumer.vertex(matrices.peek().getPositionMatrix(), x3, y3, z3).color(colour.getR(), colour.getG(), colour.getB(), 0.2F).next();
+        vertexConsumer.vertex(matrices.peek().getPositionMatrix(), x2, y2, z2).color(colour.getR(), colour.getG(), colour.getB(), 0.2F).next();
+        vertexConsumer.vertex(matrices.peek().getPositionMatrix(), x1, y1, z1).color(colour.getR(), colour.getG(), colour.getB(), 0.2F).next();
+    }
+
     public static void vertexLine(MatrixStack matrices, VertexConsumer vertexConsumer, float x1, float y1, float z1, float x2, float y2, float z2, float alpha, Colour colour) {
         Matrix4f model = matrices.peek().getPositionMatrix();
         Matrix3f normal = matrices.peek().getNormalMatrix();

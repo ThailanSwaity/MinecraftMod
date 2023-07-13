@@ -29,7 +29,7 @@ public class ShulkerESP extends RenderedHack implements BlockDetector {
     @Override
     public BiConsumer<BlockPos, BlockState> blockResponse(Camera camera) {
         return ((blockPos, blockState) -> {
-            Renderer.drawBoxOutline(blockPos, Colour.CORAL, lineWidth, alpha);
+            Renderer.drawBoxBoth(blockPos, Colour.CORAL, lineWidth, alpha);
         });
     }
 

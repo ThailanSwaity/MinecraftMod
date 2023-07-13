@@ -16,6 +16,7 @@
     "WorldRendererMixin",
     "ClientPlayNetworkHandlerMixin",
     "SplashTextResourceSupplierMixin",
+    "GameRendererMixin",
     "LightmapTextureManagerMixin",
     "EntityRendererMixin",
     "AbstractHorseEntityMixin",

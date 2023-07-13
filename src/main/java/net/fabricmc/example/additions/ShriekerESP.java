@@ -28,7 +28,7 @@ public class ShriekerESP extends RenderedHack implements BlockDetector {
     @Override
     public BiConsumer<BlockPos, BlockState> blockResponse(Camera camera) {
         return ((blockPos, blockState) -> {
-            Renderer.drawBoxOutline(blockPos, Colour.RED, lineWidth, alpha);
+            Renderer.drawBoxBoth(blockPos, Colour.RED, lineWidth, alpha);
         });
     }
 

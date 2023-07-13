@@ -65,6 +65,7 @@ public class ExampleMod implements ModInitializer {
 	public static Waypoints waypoints;
 	public static Glasses glasses;
 	public static BetterPortal betterPortal;
+	public static NoDamageTilt noDamageTilt;
 	public static WaypointList waypointList = new WaypointList();
 	public AdditionManager additionManager = new AdditionManager();
 	public static ExampleMod getInstance() {
@@ -154,6 +155,8 @@ public class ExampleMod implements ModInitializer {
 		additionManager.addDisplay(glasses);
 		betterPortal = new BetterPortal(client);
 		additionManager.addDisplay(betterPortal);
+		noDamageTilt = new NoDamageTilt();
+		additionManager.addDisplay(noDamageTilt);
 
 		hacksOverlay = new HacksOverlay();
 		additionManager.addDisplay(hacksOverlay);
@@ -376,6 +379,15 @@ public class ExampleMod implements ModInitializer {
 				DataUtil.loadServerWaypoints(waypointList, client.getNetworkHandler().getServerInfo().address);
 				client.player.sendMessage(Text.literal("Loaded waypoints for " + client.getNetworkHandler().getServerInfo().address));
 			}
+		});
+
+		commandList.register("ego", (args) -> {
+			String player = "";
+			for (int i = 0; i < args.length; i++) {
+				player += args[i];
+				if (i != args.length) player += " ";
+			}
+			client.getNetworkHandler().sendChatMessage("u have a huge ego " + player);
 		});
 
 		ArrayList<String> friends = DataUtil.loadFriendsList();
