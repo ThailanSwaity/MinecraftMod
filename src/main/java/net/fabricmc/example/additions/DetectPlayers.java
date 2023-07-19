@@ -1,9 +1,6 @@
 package net.fabricmc.example.additions;
 
-import net.fabricmc.example.Colour;
-import net.fabricmc.example.EntityDetector;
-import net.fabricmc.example.ExampleMod;
-import net.fabricmc.example.Renderer;
+import net.fabricmc.example.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
 import net.minecraft.entity.Entity;
@@ -14,7 +11,7 @@ import net.minecraft.util.math.Vec3d;
 
 import java.util.ArrayList;
 
-public class DetectPlayers extends RenderedHack implements EntityDetector {
+public class DetectPlayers extends RenderedHack implements EntityDetector, EntityHighlighter {
 
     private MinecraftClient client;
 
@@ -58,5 +55,10 @@ public class DetectPlayers extends RenderedHack implements EntityDetector {
         } else {
             Renderer.drawLine(cursorPosition.getX(), cursorPosition.getY(), cursorPosition.getZ(), entity.getX(), entity.getY(), entity.getZ(), lineWidth, alpha, Colour.RED);
         }
+    }
+
+    @Override
+    public boolean shouldHighlight(Entity entity) {
+        return entity instanceof PlayerEntity;
     }
 }

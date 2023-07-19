@@ -11,6 +11,7 @@ public class AdditionManager {
     private ArrayList<Hack> blockDetectors = new ArrayList<>();
     private ArrayList<Hack> blockEntityDetectors = new ArrayList<>();
     private ArrayList<Hack> entityDetectors = new ArrayList<>();
+    private ArrayList<Hack> entityHighlighters = new ArrayList<>();
     private ArrayList<Hack> displayHacks = new ArrayList<>();
 
     public AdditionManager() {
@@ -23,6 +24,7 @@ public class AdditionManager {
         if (hack instanceof BlockDetector) blockDetectors.add(hack);
         if (hack instanceof BlockEntityDetector) blockEntityDetectors.add(hack);
         if (hack instanceof EntityDetector) entityDetectors.add(hack);
+        if (hack instanceof EntityHighlighter) entityHighlighters.add(hack);
     }
 
     public void addDisplay(Hack hack) {
@@ -41,6 +43,9 @@ public class AdditionManager {
     }
     public ArrayList<Hack> getEntityDetectors() {
         return entityDetectors;
+    }
+    public ArrayList<Hack> getEntityHighlighters() {
+        return entityHighlighters;
     }
     public ArrayList<Hack> getDisplayHacks() {
         return displayHacks;

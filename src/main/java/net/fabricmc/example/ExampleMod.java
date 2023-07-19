@@ -395,6 +395,12 @@ public class ExampleMod implements ModInitializer {
 			client.getNetworkHandler().sendChatMessage("u have a huge ego " + player);
 		});
 
+		commandList.register("ping", (args) -> {
+			if (client.getNetworkHandler() != null) {
+				client.player.sendMessage(Text.literal("Ping: " + client.getNetworkHandler().getServerInfo().ping).formatted(Formatting.GOLD));
+			}
+		});
+
 		ArrayList<String> friends = DataUtil.loadFriendsList();
 		friendList.setFriends(friends);
 		LOGGER.info("Loaded friends list");

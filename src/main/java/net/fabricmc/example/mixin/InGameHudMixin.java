@@ -12,12 +12,17 @@ import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.scoreboard.Scoreboard;
+import net.minecraft.scoreboard.ScoreboardCriterion;
+import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.ArrayList;
@@ -35,6 +40,16 @@ public abstract class InGameHudMixin {
     @Shadow protected abstract PlayerEntity getCameraPlayer();
 
     @Shadow private int scaledWidth;
+
+//    @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/PlayerListHud;render(Lnet/minecraft/client/gui/DrawContext;ILnet/minecraft/scoreboard/Scoreboard;Lnet/minecraft/scoreboard/ScoreboardObjective;)V"), index = 3)
+//    private ScoreboardObjective setScoreboardObject(@Nullable ScoreboardObjective objective) {
+//        if (objective != null) {
+//            objective.setRenderType(ScoreboardCriterion.RenderType.HEARTS);
+//            return objective;
+//        } else {
+//            return new ScoreboardObjective(ExampleMod.getInstance().client.world.getScoreboard(), "Hearts", ScoreboardCriterion.HEALTH, Text.literal("Hearts"), ScoreboardCriterion.RenderType.HEARTS);
+//        }
+//    }
 
     @Inject(at = @At("TAIL"), method = "render")
     private void render(DrawContext context, float tickDelta, CallbackInfo ci) {

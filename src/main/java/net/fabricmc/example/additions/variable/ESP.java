@@ -8,6 +8,7 @@ public class ESP extends VariableHack {
 
     private ChestESP chestESP;
     private PlayerESP playerESP;
+    private WardenESP wardenESP;
 
     private float r = 1;
     private float g = 1;
@@ -24,6 +25,9 @@ public class ESP extends VariableHack {
         playerESP = new PlayerESP(this);
         subHacks.add(playerESP);
         subHacks.add(new EndCrystalESP(this));
+        subHacks.add(new CatalystESP(this));
+        wardenESP = new WardenESP(this);
+        subHacks.add(wardenESP);
 
         initSubHacks();
 
@@ -92,6 +96,9 @@ public class ESP extends VariableHack {
 
     public boolean isDetectingPlayers() {
         return playerESP.isEnabled();
+    }
+    public boolean isDetectingWarden() {
+        return wardenESP.isEnabled();
     }
 
 }
