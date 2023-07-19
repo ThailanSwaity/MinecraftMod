@@ -10,6 +10,7 @@
     "GameMenuScreenMixin",
     "ClientConnectionInvoker",
     "ClientPlayerEntityMixin",
+    "ServerEntryMixin",
     "DeathScreenMixin",
     "ChatScreenMixin",
     "FrameBufferMixin",
