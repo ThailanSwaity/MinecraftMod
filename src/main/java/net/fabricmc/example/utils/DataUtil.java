@@ -1,10 +1,13 @@
 package net.fabricmc.example.utils;
 
+import com.google.gson.*;
 import net.fabricmc.example.ExampleMod;
 import net.fabricmc.example.Waypoint;
 import net.fabricmc.example.WaypointList;
 import net.fabricmc.example.additions.FriendList;
+import net.fabricmc.example.additions.Hack;
 import net.fabricmc.example.additions.Waypoints;
+import net.minecraft.util.JsonHelper;
 import net.minecraft.util.math.Vec3d;
 
 import java.io.File;
@@ -54,6 +57,37 @@ public class DataUtil {
             Waypoint waypoint = new Waypoint(line);
             if (waypoint.getPosition() != null) waypointList.addWaypoint(waypoint);
         }
+    }
+
+    public static void saveHackSettings(ArrayList<Hack> hacks) {
+        JsonArray jsonArray = new JsonArray();
+
+        for (int i = 0; i < hacks.size(); i++) {
+            jsonArray.add(hacks.get(i).toJSON());
+        }
+
+        saveData("hackSettings.txt", "thaifoodclient", jsonArray.toString());
+    }
+
+    public static void loadHackSettings(ArrayList<Hack> hacks) {
+        String data = loadData("thaifoodclient/hackSettings.txt");
+        if (data == null) {
+            throw new NullPointerException("Data could not be read.");
+        }
+        JsonElement json = JsonParser.parseString(data);
+
+        ExampleMod.LOGGER.info(json.toString());
+
+        if (json.isJsonArray()) {
+            JsonArray jsonArray = json.getAsJsonArray();
+            for (int i = 0; i < jsonArray.size(); i++) {
+                JsonObject obj = jsonArray.get(i).getAsJsonObject();
+                ExampleMod.LOGGER.info(obj.toString());
+
+                hacks.get(i).fromJSON(obj);
+            }
+        }
+
     }
 
     private static boolean saveData(String filename, String directory, String data) {

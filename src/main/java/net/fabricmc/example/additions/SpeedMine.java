@@ -16,7 +16,7 @@ public class SpeedMine extends VariableHack implements Tickable {
     public SpeedMine(MinecraftClient client) {
         super("SpeedMine");
         this.client = client;
-        optionsScreen.addOptionSlider(Text.literal(String.format("%.2f", triggerChance)),
+        optionsScreen.addOptionSlider("speed", Text.literal(String.format("%.2f", triggerChance)),
                 (sliderWidget, value) -> sliderWidget.setMessage(Text.literal(String.format("%.2f", value))),
                 (sliderWidget, value) -> setTriggerChance(value), 0, 0, 115, 20, getTriggerChance()
         );

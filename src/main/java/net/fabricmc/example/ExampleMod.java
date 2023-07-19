@@ -395,6 +395,20 @@ public class ExampleMod implements ModInitializer {
 			client.getNetworkHandler().sendChatMessage("u have a huge ego " + player);
 		});
 
+		commandList.register("test2", (args) -> {
+			client.inGameHud.setOverlayMessage(Text.literal("Test"), false);
+		});
+
+		commandList.register("saveHackSettings", (args) -> {
+			DataUtil.saveHackSettings(additionManager.getAdditions());
+			client.inGameHud.setOverlayMessage(Text.literal("Hacks saved."), false);
+		});
+
+		commandList.register("loadHackSettings", (args) -> {
+			DataUtil.loadHackSettings(additionManager.getAdditions());
+			client.inGameHud.setOverlayMessage(Text.literal("Hacks loaded."), false);
+		});
+
 		commandList.register("ping", (args) -> {
 			if (client.getNetworkHandler() != null) {
 				client.player.sendMessage(Text.literal("Ping: " + client.getNetworkHandler().getServerInfo().ping).formatted(Formatting.GOLD));

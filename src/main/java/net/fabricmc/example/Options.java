@@ -56,8 +56,12 @@ public class Options extends Screen {
         widgets.add(MenuUtil.createButtonWidget(text, action, x, y, width, height));
     }
 
-    public void addOptionSlider(Text text, SliderFunction update, SliderFunction apply, int x, int y, int width, int height, double value) {
-        widgets.add(MenuUtil.createSliderWidget(text, update, apply, x, y, width, height, value));
+    public void addOptionSlider(String name, Text text, SliderFunction update, SliderFunction apply, int x, int y, int width, int height, double value) {
+        widgets.add(MenuUtil.createSliderWidget(name, text, update, apply, x, y, width, height, value));
+    }
+
+    public ArrayList<Widget> getWidgets() {
+        return widgets;
     }
 
 }

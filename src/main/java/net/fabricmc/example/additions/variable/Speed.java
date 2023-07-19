@@ -15,7 +15,7 @@ public class Speed extends VariableHack implements Tickable {
         super("Speed");
         this.client = client;
 
-        optionsScreen.addOptionSlider(Text.literal(String.format("%.2f", walkSpeed)),
+        optionsScreen.addOptionSlider("walkSpeed", Text.literal(String.format("%.2f", walkSpeed)),
                 (sliderWidget, value) -> {
                     sliderWidget.setMessage(Text.literal(String.format("%.2f", value)));
                 },

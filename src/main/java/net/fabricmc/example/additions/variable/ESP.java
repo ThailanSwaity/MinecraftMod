@@ -31,7 +31,7 @@ public class ESP extends VariableHack {
 
         initSubHacks();
 
-        optionsScreen.addOptionSlider(
+        optionsScreen.addOptionSlider("lineWidth",
                 Text.literal("Tracer lineWidth: " + String.format("%.2f", chestESP.getLineWidth())),
                 (sliderWidget, value) -> {
                     sliderWidget.setMessage(Text.literal("Tracer lineWidth: " + String.format("%.2f", value * 5)));
@@ -45,7 +45,7 @@ public class ESP extends VariableHack {
                 }, 0, 0 ,115, 20, chestESP.getLineWidth() / 5
         );
 
-        optionsScreen.addOptionSlider(
+        optionsScreen.addOptionSlider("lineAlpha",
                 Text.literal("Tracer line alpha: " + String.format("%.2f", chestESP.getAlpha())),
                 (sliderWidget, value) -> {
                     sliderWidget.setMessage(Text.literal("Tracer line alpha: " + String.format("%.2f", value)));
@@ -59,7 +59,7 @@ public class ESP extends VariableHack {
                 }, 0, 0, 115, 20, chestESP.getAlpha()
         );
 
-        optionsScreen.addOptionSlider(
+        optionsScreen.addOptionSlider("red",
                 Text.literal("Red: " + String.format("%.2f", r)),
                 (sliderWidget, value) -> {
                     sliderWidget.setMessage(Text.literal("Red: " + String.format("%.2f", value)));
@@ -69,7 +69,7 @@ public class ESP extends VariableHack {
                 }, 0, 0, 115, 20, this.r
         );
 
-        optionsScreen.addOptionSlider(
+        optionsScreen.addOptionSlider("green",
                 Text.literal("Green: " + String.format("%.2f", g)),
                 (sliderWidget, value) -> {
                     sliderWidget.setMessage(Text.literal("Green: " + String.format("%.2f", value)));
@@ -79,7 +79,7 @@ public class ESP extends VariableHack {
                 }, 0, 0, 115, 20, this.g
         );
 
-        optionsScreen.addOptionSlider(
+        optionsScreen.addOptionSlider("blue",
                 Text.literal("Blue: " + String.format("%.2f", b)),
                 (sliderWidget, value) -> {
                     sliderWidget.setMessage(Text.literal("Red: " + String.format("%.2f", value)));

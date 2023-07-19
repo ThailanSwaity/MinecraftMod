@@ -1,10 +1,14 @@
 package net.fabricmc.example.additions.variable;
 
+import com.google.gson.JsonObject;
 import net.fabricmc.example.ExampleMod;
 import net.fabricmc.example.Options;
+import net.fabricmc.example.OptionsSlider;
 import net.fabricmc.example.additions.Hack;
 import net.fabricmc.example.additions.Xray;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.SliderWidget;
+import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.text.Text;
 
 import java.util.ArrayList;
@@ -56,4 +60,36 @@ public class VariableHack extends Hack {
     protected void initSubHacks() {
         for (Hack subHack : getSubHacks()) addSubHack(subHack);
     }
+
+    @Override
+    public JsonObject toJSON() {
+        JsonObject obj = super.toJSON();
+        JsonObject objItem = new JsonObject();
+
+        ArrayList<Widget> widgets = optionsScreen.getWidgets();
+        for (int i = 0; i < widgets.size(); i++) {
+            if (widgets.get(i) instanceof OptionsSlider) {
+                JsonObject sliderObj = ((OptionsSlider)widgets.get(i)).toJSON();
+                objItem.add(((OptionsSlider)widgets.get(i)).getName(), sliderObj);
+            }
+        }
+        obj.add("settings", objItem);
+        return obj;
+    }
+
+    @Override
+    public void fromJSON(JsonObject jsonObject) {
+        super.fromJSON(jsonObject);
+        JsonObject settingsObj = jsonObject.getAsJsonObject("settings");
+
+        ArrayList<Widget> widgets = optionsScreen.getWidgets();
+        for (int i = 0; i < widgets.size(); i++) {
+            Widget widget = widgets.get(i);
+            if (widget instanceof OptionsSlider) {
+                JsonObject sliderObj = settingsObj.get(((OptionsSlider)widget).getName()).getAsJsonObject();
+                ((OptionsSlider)widgets.get(i)).fromJSON(sliderObj);
+            }
+        }
+    }
+
 }
