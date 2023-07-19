@@ -18,7 +18,7 @@ public class Fly extends VariableHack implements Tickable {
     public Fly(MinecraftClient client) {
         super("Fly");
         this.client = client;
-        this.optionsScreen.addOptionSlider(Text.literal(String.format("%.2f", flySpeed)),
+        this.optionsScreen.addOptionSlider("flySpeed", Text.literal(String.format("%.2f", flySpeed)),
                 (sliderWidget, value) -> sliderWidget.setMessage(Text.literal(String.format("%.2f", value))),
                 (sliderWidget, value) -> setFlySpeed((float)value), 0, 0, 115, 20, flySpeed
         );

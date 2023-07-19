@@ -20,7 +20,7 @@ public class Zoom extends VariableHack implements Tickable {
         super("Zoom");
         this.client = client;
 
-        optionsScreen.addOptionSlider(Text.literal("Zoom FOV: " + newFOV),
+        optionsScreen.addOptionSlider("zoomFOV", Text.literal("Zoom FOV: " + newFOV),
                 (sliderWidget, value) -> {
                     sliderWidget.setMessage(Text.literal("Zoom FOV: " + (int)Math.floor(value * 360)));
                 },

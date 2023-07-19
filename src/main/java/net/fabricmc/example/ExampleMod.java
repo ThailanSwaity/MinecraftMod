@@ -211,6 +211,7 @@ public class ExampleMod implements ModInitializer {
 		ClientTickEvents.END_CLIENT_TICK.register(client1 -> {
 			while (keyBinding_r.wasPressed()) {
 				xray.cycle();
+				client.inGameHud.setOverlayMessage(xray.getString(), false);
 			}
 		});
 
@@ -393,6 +394,20 @@ public class ExampleMod implements ModInitializer {
 				if (i != args.length) player += " ";
 			}
 			client.getNetworkHandler().sendChatMessage("u have a huge ego " + player);
+		});
+
+		commandList.register("test2", (args) -> {
+			client.inGameHud.setOverlayMessage(Text.literal("Test"), false);
+		});
+
+		commandList.register("saveHackSettings", (args) -> {
+			DataUtil.saveHackSettings(additionManager.getAdditions());
+			client.inGameHud.setOverlayMessage(Text.literal("Hacks saved."), false);
+		});
+
+		commandList.register("loadHackSettings", (args) -> {
+			DataUtil.loadHackSettings(additionManager.getAdditions());
+			client.inGameHud.setOverlayMessage(Text.literal("Hacks loaded."), false);
 		});
 
 		ArrayList<String> friends = DataUtil.loadFriendsList();

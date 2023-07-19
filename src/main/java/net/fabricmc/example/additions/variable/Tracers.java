@@ -20,7 +20,7 @@ public class Tracers extends VariableHack {
 
         initSubHacks();
 
-        optionsScreen.addOptionSlider(
+        optionsScreen.addOptionSlider("lineWidth",
                 Text.literal("Tracer lineWidth: " + String.format("%.2f", detectPlayers.getLineWidth())),
                 (sliderWidget, value) -> {
                     sliderWidget.setMessage(Text.literal("Tracer lineWidth: " + String.format("%.2f", value * 5)));
@@ -34,7 +34,7 @@ public class Tracers extends VariableHack {
                 }, 0, 0 ,115, 20, detectPlayers.getLineWidth() / 5
         );
 
-        optionsScreen.addOptionSlider(
+        optionsScreen.addOptionSlider("lineAlpha",
                 Text.literal("Tracer line alpha: " + String.format("%.2f", detectPlayers.getAlpha())),
                 (sliderWidget, value) -> {
                     sliderWidget.setMessage(Text.literal("Tracer line alpha: " + String.format("%.2f", value)));
