@@ -82,12 +82,6 @@ public class DataUtil {
                 loadHack(hacks.get(i), jsonHackArray);
             }
 
-//            for (int i = 0; i < jsonArray.size(); i++) {
-//                JsonObject obj = jsonArray.get(i).getAsJsonObject();
-//                ExampleMod.LOGGER.info(obj.toString());
-//
-//                hacks.get(i).fromJSON(obj);
-//            }
         }
 
     }
@@ -144,7 +138,5 @@ public class DataUtil {
         }
         return data;
     }
-
-
 
 }

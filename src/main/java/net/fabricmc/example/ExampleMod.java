@@ -32,7 +32,6 @@ public class ExampleMod implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger("modid");
 
 	public static ModMenuScreen modMenuScreen;
-
 	private static KeyBinding keyBinding_r;
 	private static KeyBinding keyBinding_y;
 	private static KeyBinding keyBinding_g;
@@ -67,6 +66,7 @@ public class ExampleMod implements ModInitializer {
 	public static BetterPortal betterPortal;
 	public static NoDamageTilt noDamageTilt;
 	public static WaypointList waypointList = new WaypointList();
+	public static Fog fog;
 	public AdditionManager additionManager = new AdditionManager();
 	public static ExampleMod getInstance() {
 		return instance;
@@ -157,6 +157,8 @@ public class ExampleMod implements ModInitializer {
 		additionManager.addDisplay(betterPortal);
 		noDamageTilt = new NoDamageTilt();
 		additionManager.addDisplay(noDamageTilt);
+		fog = new Fog();
+		additionManager.addDisplay(fog);
 
 		hacksOverlay = new HacksOverlay();
 		additionManager.addDisplay(hacksOverlay);

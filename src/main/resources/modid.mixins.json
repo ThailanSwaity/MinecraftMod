@@ -19,6 +19,7 @@
     "ClientPlayNetworkHandlerMixin",
     "SplashTextResourceSupplierMixin",
     "PlayerListHudMixin",
+    "BackgroundRendererMixin",
     "GameRendererMixin",
     "LightmapTextureManagerMixin",
     "EntityRendererMixin",

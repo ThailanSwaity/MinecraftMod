@@ -1,5 +1,6 @@
 package net.fabricmc.example.mixin;
 
+import net.fabricmc.example.ExampleMod;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.util.math.MatrixStack;
@@ -24,15 +25,16 @@ public abstract class EntityRendererMixin<T extends Entity> {
 
     @Inject(at = @At("HEAD"), method = "shouldRender", cancellable = true)
     private void shouldRender(T entity, Frustum frustum, double x, double y, double z, CallbackInfoReturnable<Boolean> cir) {
-        if (entity instanceof PlayerEntity) {
-            cir.setReturnValue(true);
-        }
+        //if (entity instanceof PlayerEntity) {
+            //cir.setReturnValue(true);
+        //}
     }
 
     @Inject(at = @At("HEAD"), method = "render", cancellable = true)
     private void render(T entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
         if (hasLabel(entity)) {
             if (entity instanceof LivingEntity) {
+                if (!ExampleMod.entityNames.isEnabled()) return;
                 String namePlateString = entity.getDisplayName().getString() + " " + ((LivingEntity)entity).getHealth();
                 renderLabelIfPresent(entity, Text.literal(namePlateString), matrices, vertexConsumers, light);
                 ci.cancel();
