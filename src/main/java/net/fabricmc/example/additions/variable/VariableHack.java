@@ -7,7 +7,6 @@ import net.fabricmc.example.OptionsSlider;
 import net.fabricmc.example.additions.Hack;
 import net.fabricmc.example.additions.Xray;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.SliderWidget;
 import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.text.Text;
 

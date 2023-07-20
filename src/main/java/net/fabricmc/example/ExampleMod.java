@@ -33,11 +33,6 @@ public class ExampleMod implements ModInitializer {
 
 	public static ModMenuScreen modMenuScreen;
 
-	public static int r = 255;
-	public static int g = 255;
-	public static int b = 255;
-	public static int a = 255;
-
 	private static KeyBinding keyBinding_r;
 	private static KeyBinding keyBinding_y;
 	private static KeyBinding keyBinding_g;
@@ -253,7 +248,6 @@ public class ExampleMod implements ModInitializer {
 			if (friendList.isEmpty()) {
 				client.player.sendMessage(Text.literal("Friend list is empty."));
 			} else {
-				List<AbstractClientPlayerEntity> players = client.world.getPlayers();
 				client.player.sendMessage(Text.literal("Friend list:"));
 				for (String name : friendNames) {
 					PlayerListEntry playerListEntry = client.player.networkHandler.getPlayerListEntry(name);

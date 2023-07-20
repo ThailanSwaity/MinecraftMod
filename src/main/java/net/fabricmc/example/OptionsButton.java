@@ -6,8 +6,6 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.text.html.Option;
-
 public class OptionsButton extends ButtonWidget {
 
     private Hack parentHack;
@@ -23,10 +21,6 @@ public class OptionsButton extends ButtonWidget {
 
     public void refresh() {
         this.setMessage(parentHack.getString());
-    }
-
-    protected void setParent(Hack parentHack) {
-        this.parentHack = parentHack;
     }
 
     public static class OptionsBuilder {

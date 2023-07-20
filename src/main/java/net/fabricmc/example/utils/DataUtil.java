@@ -6,9 +6,6 @@ import net.fabricmc.example.Waypoint;
 import net.fabricmc.example.WaypointList;
 import net.fabricmc.example.additions.FriendList;
 import net.fabricmc.example.additions.Hack;
-import net.fabricmc.example.additions.Waypoints;
-import net.minecraft.util.JsonHelper;
-import net.minecraft.util.math.Vec3d;
 
 import java.io.File;
 import java.io.FileNotFoundException;

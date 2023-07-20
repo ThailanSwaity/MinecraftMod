@@ -6,14 +6,13 @@ import net.minecraft.text.Text;
 
 public class ESP extends VariableHack {
 
-    private ChestESP chestESP;
     private float r = 1;
     private float g = 1;
     private float b = 1;
 
     public ESP() {
         super("ESP");
-        chestESP = new ChestESP(this);
+        ChestESP chestESP = new ChestESP(this);
         subHacks.add(chestESP);
         subHacks.add(new ShriekerESP(this));
         subHacks.add(new ShulkerESP(this));
@@ -29,9 +28,7 @@ public class ESP extends VariableHack {
 
         optionsScreen.addOptionSlider("lineWidth",
                 Text.literal("Tracer lineWidth: " + String.format("%.2f", chestESP.getLineWidth())),
-                (sliderWidget, value) -> {
-                    sliderWidget.setMessage(Text.literal("Tracer lineWidth: " + String.format("%.2f", value * 5)));
-                },
+                (sliderWidget, value) -> sliderWidget.setMessage(Text.literal("Tracer lineWidth: " + String.format("%.2f", value * 5))),
                 (sliderWidget, value) -> {
                     for (Hack hack : subHacks) {
                         if (hack instanceof RenderedHack) {
@@ -43,9 +40,7 @@ public class ESP extends VariableHack {
 
         optionsScreen.addOptionSlider("lineAlpha",
                 Text.literal("Tracer line alpha: " + String.format("%.2f", chestESP.getAlpha())),
-                (sliderWidget, value) -> {
-                    sliderWidget.setMessage(Text.literal("Tracer line alpha: " + String.format("%.2f", value)));
-                },
+                (sliderWidget, value) -> sliderWidget.setMessage(Text.literal("Tracer line alpha: " + String.format("%.2f", value))),
                 (sliderWidget, value) -> {
                     for (Hack hack : subHacks) {
                         if (hack instanceof RenderedHack) {
@@ -57,32 +52,20 @@ public class ESP extends VariableHack {
 
         optionsScreen.addOptionSlider("red",
                 Text.literal("Red: " + String.format("%.2f", r)),
-                (sliderWidget, value) -> {
-                    sliderWidget.setMessage(Text.literal("Red: " + String.format("%.2f", value)));
-                },
-                (sliderWidget, value) -> {
-                    this.r = (float) value;
-                }, 0, 0, 115, 20, this.r
+                (sliderWidget, value) -> sliderWidget.setMessage(Text.literal("Red: " + String.format("%.2f", value))),
+                (sliderWidget, value) -> this.r = (float) value, 0, 0, 115, 20, this.r
         );
 
         optionsScreen.addOptionSlider("green",
                 Text.literal("Green: " + String.format("%.2f", g)),
-                (sliderWidget, value) -> {
-                    sliderWidget.setMessage(Text.literal("Green: " + String.format("%.2f", value)));
-                },
-                (sliderWidget, value) -> {
-                    this.g = (float) value;
-                }, 0, 0, 115, 20, this.g
+                (sliderWidget, value) -> sliderWidget.setMessage(Text.literal("Green: " + String.format("%.2f", value))),
+                (sliderWidget, value) -> this.g = (float) value, 0, 0, 115, 20, this.g
         );
 
         optionsScreen.addOptionSlider("blue",
                 Text.literal("Blue: " + String.format("%.2f", b)),
-                (sliderWidget, value) -> {
-                    sliderWidget.setMessage(Text.literal("Red: " + String.format("%.2f", value)));
-                },
-                (sliderWidget, value) -> {
-                    this.b = (float) value;
-                }, 0, 0, 115, 20, this.b
+                (sliderWidget, value) -> sliderWidget.setMessage(Text.literal("Red: " + String.format("%.2f", value))),
+                (sliderWidget, value) -> this.b = (float) value, 0, 0, 115, 20, this.b
         );
     }
 

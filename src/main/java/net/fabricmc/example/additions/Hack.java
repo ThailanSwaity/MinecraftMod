@@ -7,7 +7,7 @@ import net.minecraft.util.Formatting;
 public abstract class Hack {
 
     private boolean enabled = false;
-    protected String name = "";
+    protected String name;
     protected Hack parentHack;
 
     public Hack(String name) {
