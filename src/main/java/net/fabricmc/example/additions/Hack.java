@@ -4,8 +4,6 @@ import com.google.gson.JsonObject;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
-import java.util.ArrayList;
-
 public abstract class Hack {
 
     private boolean enabled = false;
@@ -52,10 +50,6 @@ public abstract class Hack {
 
     }
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
     public boolean isEnabled() {
         if (getParent() != null) {
             return enabled && getParent().isEnabled();
@@ -72,11 +66,7 @@ public abstract class Hack {
     }
 
     public Text getString() {
-        if (!localEnabled()) {
-            return Text.literal(name + " ").append((isEnabled() ? Text.literal("enabled").formatted(Formatting.GREEN) : Text.literal("disabled").formatted(Formatting.RED)));
-        }
-        return Text.literal(name + " ").append((isEnabled() ? Text.literal("enabled").formatted(Formatting.GREEN) : Text.literal("disabled").formatted(Formatting.RED)));
-        //return Text.literal(toString()).formatted(Formatting.GREEN).append(Text.literal(" Test").formatted(Formatting.AQUA));
+        return Text.literal(name + " ").append((localEnabled() ? Text.literal("enabled").formatted(Formatting.GREEN) : Text.literal("disabled").formatted(Formatting.RED)));
     }
 
     public Hack getParent() {

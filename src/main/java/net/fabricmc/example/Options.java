@@ -1,5 +1,6 @@
 package net.fabricmc.example;
 
+import net.fabricmc.example.additions.Hack;
 import net.fabricmc.example.utils.MenuUtil;
 import net.fabricmc.example.utils.SliderFunction;
 import net.minecraft.client.gui.screen.Screen;
@@ -46,6 +47,12 @@ public class Options extends Screen {
         gridWidget.refreshPositions();
         SimplePositioningWidget.setPos(gridWidget, 0, 0, this.width, this.height, 0.5f, 0.25f);
         gridWidget.forEachChild(this::addDrawableChild);
+
+        refresh();
+    }
+
+    public void addOptionButton(Hack parentHack, Text text, ButtonWidget.PressAction action, int width, int height) {
+        widgets.add(MenuUtil.createButtonWidget(parentHack, text, action, width, height));
     }
 
     public void addOptionButton(Text text, ButtonWidget.PressAction action, int width, int height) {
@@ -62,6 +69,14 @@ public class Options extends Screen {
 
     public ArrayList<Widget> getWidgets() {
         return widgets;
+    }
+
+    private void refresh() {
+        for (Widget widget : widgets) {
+            if (widget instanceof OptionsButton) {
+                ((OptionsButton)widget).refresh();
+            }
+        }
     }
 
 }

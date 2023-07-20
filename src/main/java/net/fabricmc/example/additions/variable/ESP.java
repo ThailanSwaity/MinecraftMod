@@ -7,9 +7,6 @@ import net.minecraft.text.Text;
 public class ESP extends VariableHack {
 
     private ChestESP chestESP;
-    private PlayerESP playerESP;
-    private WardenESP wardenESP;
-
     private float r = 1;
     private float g = 1;
     private float b = 1;
@@ -22,12 +19,11 @@ public class ESP extends VariableHack {
         subHacks.add(new ShulkerESP(this));
         subHacks.add(new SignESP(this));
         subHacks.add(new ItemESP(this));
-        playerESP = new PlayerESP(this);
-        subHacks.add(playerESP);
+        subHacks.add(new PlayerESP(this));
         subHacks.add(new EndCrystalESP(this));
         subHacks.add(new CatalystESP(this));
-        wardenESP = new WardenESP(this);
-        subHacks.add(wardenESP);
+        subHacks.add(new WardenESP(this));
+        subHacks.add(new DragonESP(this));
 
         initSubHacks();
 
@@ -92,13 +88,6 @@ public class ESP extends VariableHack {
 
     public Colour getPlayerOutlineColour() {
         return new Colour(r, g, b);
-    }
-
-    public boolean isDetectingPlayers() {
-        return playerESP.isEnabled();
-    }
-    public boolean isDetectingWarden() {
-        return wardenESP.isEnabled();
     }
 
 }

@@ -40,7 +40,7 @@ public class VariableHack extends Hack {
 
     private void addSubHack(Hack hack) {
         if (hack instanceof VariableHack) {
-            optionsScreen.addOptionButton(hack.getString(), button -> {
+            optionsScreen.addOptionButton(hack, hack.getString(), button -> {
                 hack.toggle();
                 button.setMessage(hack.getString());
             }, 90, 20);
@@ -49,7 +49,7 @@ public class VariableHack extends Hack {
                 ExampleMod.getInstance().client.setScreen(((VariableHack)hack).getScreen());
             }, 15, 20);
         } else {
-            optionsScreen.addOptionButton(hack.getString(), button -> {
+            optionsScreen.addOptionButton(hack, hack.getString(), button -> {
                 if (hack instanceof Xray) ((Xray)hack).cycle();
                 else hack.toggle();
                 button.setMessage(hack.getString());

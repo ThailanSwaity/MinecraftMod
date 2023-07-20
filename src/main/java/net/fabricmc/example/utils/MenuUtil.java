@@ -1,6 +1,8 @@
 package net.fabricmc.example.utils;
 
+import net.fabricmc.example.OptionsButton;
 import net.fabricmc.example.OptionsSlider;
+import net.fabricmc.example.additions.Hack;
 import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.SliderWidget;
@@ -15,6 +17,10 @@ public class MenuUtil {
 
     public static ButtonWidget createButtonWidget(Text text, ButtonWidget.PressAction action, int x, int y, int width, int height) {
         return ButtonWidget.builder(text, action).dimensions(x, y, width, height).build();
+    }
+
+    public static ButtonWidget createButtonWidget(Hack parentHack, Text text, ButtonWidget.PressAction action, int width, int height) {
+        return OptionsButton.optionsBuilder(text, action).size(width, height).parent(parentHack).build();
     }
 
     public static SliderWidget createSliderWidget(String name, Text text, SliderFunction update, SliderFunction apply, int x, int y, int width, int height, double value) {

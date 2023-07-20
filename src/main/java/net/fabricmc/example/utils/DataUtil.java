@@ -79,15 +79,30 @@ public class DataUtil {
         ExampleMod.LOGGER.info(json.toString());
 
         if (json.isJsonArray()) {
-            JsonArray jsonArray = json.getAsJsonArray();
-            for (int i = 0; i < jsonArray.size(); i++) {
-                JsonObject obj = jsonArray.get(i).getAsJsonObject();
-                ExampleMod.LOGGER.info(obj.toString());
+            JsonArray jsonHackArray = json.getAsJsonArray();
 
-                hacks.get(i).fromJSON(obj);
+            for (int i = 0; i < hacks.size(); i++) {
+                loadHack(hacks.get(i), jsonHackArray);
             }
+
+//            for (int i = 0; i < jsonArray.size(); i++) {
+//                JsonObject obj = jsonArray.get(i).getAsJsonObject();
+//                ExampleMod.LOGGER.info(obj.toString());
+//
+//                hacks.get(i).fromJSON(obj);
+//            }
         }
 
+    }
+
+    private static void loadHack(Hack hack, JsonArray jsonHackArray) {
+        for (int i = 0; i < jsonHackArray.size(); i++) {
+            JsonObject obj = jsonHackArray.get(i).getAsJsonObject();
+            String hackName = obj.get("hack").getAsJsonObject().get("name").getAsString();
+            if (hackName.equalsIgnoreCase(hack.getName())) {
+                hack.fromJSON(obj);
+            }
+        }
     }
 
     private static boolean saveData(String filename, String directory, String data) {

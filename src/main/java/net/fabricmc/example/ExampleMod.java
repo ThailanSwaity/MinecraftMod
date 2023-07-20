@@ -211,6 +211,7 @@ public class ExampleMod implements ModInitializer {
 		ClientTickEvents.END_CLIENT_TICK.register(client1 -> {
 			while (keyBinding_r.wasPressed()) {
 				xray.cycle();
+				client.inGameHud.setOverlayMessage(xray.getString(), false);
 			}
 		});
 
@@ -410,7 +411,7 @@ public class ExampleMod implements ModInitializer {
 		});
 
 		commandList.register("ping", (args) -> {
-			if (client.getNetworkHandler() != null) {
+			if (client.getNetworkHandler().getServerInfo() != null) {
 				client.player.sendMessage(Text.literal("Ping: " + client.getNetworkHandler().getServerInfo().ping).formatted(Formatting.GOLD));
 			}
 		});
