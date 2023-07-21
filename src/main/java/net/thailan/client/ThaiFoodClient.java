@@ -3,6 +3,7 @@ package net.thailan.client;
 import net.fabricmc.api.ModInitializer;
 import net.thailan.client.additions.variable.*;
 import net.thailan.client.gui.ModMenuScreen;
+import net.thailan.client.mixin.ExampleMixin;
 import net.thailan.client.utils.KeyBinder;
 import net.thailan.client.utils.command.CommandHelper;
 import net.thailan.client.utils.DataUtil;
@@ -79,6 +80,8 @@ public class ThaiFoodClient implements ModInitializer {
 		ArrayList<String> friends = DataUtil.loadFriendsList();
 		friendList.setFriends(friends);
 		LOGGER.info("Loaded friends list");
+
+		loadHacks();
 
 		LOGGER.info("Hello Fabric world!");
 	}
@@ -225,4 +228,24 @@ public class ThaiFoodClient implements ModInitializer {
 		speedMine = new SpeedMine(client);
 		additionManager.addDisplay(speedMine);
 	}
+
+	public void saveHacks() {
+		try {
+			DataUtil.saveHackSettings(additionManager.getAdditions());
+			LOGGER.info("Hacks saved.");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public void loadHacks() {
+		try {
+			DataUtil.loadHackSettings(additionManager.getAdditions());
+			LOGGER.info("Hacks loaded.");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 }
