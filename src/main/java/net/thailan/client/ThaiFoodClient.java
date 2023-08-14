@@ -163,6 +163,8 @@ public class ThaiFoodClient implements ModInitializer {
 		noWeather = new NoWeather();
 		additionManager.addDisplay(noWeather);
 
+		additionManager.addDisplay(new BlockSpacer());
+
 		// Rendering
 		tracers = new Tracers(client);
 		additionManager.addDisplay(tracers);

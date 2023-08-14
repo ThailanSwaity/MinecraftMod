@@ -217,6 +217,10 @@ public class CommandHelper {
                 client.player.sendMessage(Text.literal("Ping: " + client.getNetworkHandler().getServerInfo().ping).formatted(Formatting.GOLD));
             }
         });
+
+        commandList.register("keyboard", (args) -> {
+            client.player.sendMessage(Text.literal("This keyboard is awesome. I love the Varmilo Bluebell, it's so nice and silent, but also feels really good! I could type on this forever... I don't want to stop tbh"));
+        });
     }
 
     public static boolean process(String text) {
