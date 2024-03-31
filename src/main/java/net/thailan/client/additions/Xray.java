@@ -4,61 +4,54 @@ import net.minecraft.block.Block;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.thailan.client.additions.xray.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 
 public class Xray extends Hack {
 
     private MinecraftClient client;
-    private HashSet<Block> hiddenBlocks = new HashSet<>();
-    private HashSet<Block> caveHiddenBlocks = new HashSet<>();
-    private HashSet<Block> spawnerShownBlocks = new HashSet<>();
-    private int mode = -1;
-    public static final int ORE_MODE = 0;
-    public static final int CAVE_MODE = 1;
-    public static final int SPAWNER_MODE = 2;
+    private ArrayList<XrayStrategy> xrayStrategies;
+    private XrayStrategy currentXrayStrategy;
+    private int currentStrategy;
 
     public Xray(MinecraftClient client) {
         super("Xray");
         this.client = client;
+        xrayStrategies = new ArrayList<>();
+        xrayStrategies.add(new NullStrategy());
+        xrayStrategies.add(new OreStrategy());
+        xrayStrategies.add(new CaveStrategy());
+        xrayStrategies.add(new SpawnerStrategy());
+
+        currentXrayStrategy = xrayStrategies.get(0);
+        currentStrategy = 0;
     }
 
-    public void addBlocksORE(Block... blocks) {
-        for (Block block : blocks) {
-            hiddenBlocks.add(block);
-        }
-    }
-
-    public void addBlocksCAVE(Block... blocks) {
-        for (Block block : blocks) {
-            caveHiddenBlocks.add(block);
-        }
-    }
-
-    public void addBlocksSPAWNER(Block... blocks) {
-        for (Block block : blocks) {
-            spawnerShownBlocks.add(block);
-        }
-    }
-
-    public void setMode(int mode) {
-        this.mode = mode;
+    public void addStrategies(XrayStrategy... xrayStrategies) {
+        Collections.addAll(this.xrayStrategies, xrayStrategies);
     }
 
     public void cycle() {
-        mode++;
-        if (mode > 2) {
-            disable();
-            mode = -1;
-        } else enable();
+        currentStrategy++;
+        currentStrategy %= xrayStrategies.size();
+        currentXrayStrategy = xrayStrategies.get(currentStrategy);
+        if (currentStrategy == 0) disable();
+        else enable();
     }
 
     public boolean isEnabled() {
-        return mode != -1;
+        return currentStrategy != 0;
     }
 
-    public int getMode() {
-        return  mode;
+    public String getMode() {
+        return currentXrayStrategy.getName();
+    }
+
+    public boolean isCulling() {
+        return currentXrayStrategy.doCulling();
     }
 
     @Override
@@ -75,12 +68,7 @@ public class Xray extends Hack {
 
     @Override
     public String toString() {
-        String xrayString = "";
-        if (!isEnabled()) xrayString = "Xray disabled";
-        else if (getMode() == Xray.ORE_MODE) xrayString = "Xray showing ORE";
-        else if (getMode() == Xray.CAVE_MODE) xrayString = "Xray showing CAVES";
-        else if (getMode() == Xray.SPAWNER_MODE) xrayString = "Xray showing SPAWNERS";
-        return xrayString;
+        return getMode();
     }
 
     @Override
@@ -91,9 +79,7 @@ public class Xray extends Hack {
     }
 
     public boolean blockIsVisible(Block block) {
-        if (mode == ORE_MODE) return !hiddenBlocks.contains(block);
-        else if (mode == SPAWNER_MODE) return spawnerShownBlocks.contains(block);
-        return !caveHiddenBlocks.contains(block);
+        return currentXrayStrategy.blockIsVisible(block);
     }
 
 }

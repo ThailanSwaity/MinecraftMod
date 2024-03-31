@@ -1,39 +1,42 @@
 package net.thailan.client.additions;
 
-import net.thailan.client.ThaiFoodClient;
+import net.thailan.client.additions.killaura.*;
 import net.thailan.client.triggers.Tickable;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.mob.ZombifiedPiglinEntity;
-import net.minecraft.entity.passive.PassiveEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
+import java.util.ArrayList;
+
 public class KillAura extends Hack implements Tickable {
 
-    private static final int PLAYERS = 1;
-    private static final int PASSIVES = 2;
-    private static final int HOSTILES = 3;
-    private static final int PLAYERS_AND_HOSTILES = 4;
-    private static final int HOSTILES_AND_PASSIVES = 5;
-    private static final int ALL = 6;
-    private int mode = 0;
+    private ArrayList<AuraStrategy> auraStrategies;
+    private AuraStrategy currentAuraStrategy;
+    private int currentStrategy;
     private MinecraftClient client;
 
     public KillAura(MinecraftClient client) {
         super("KillAura");
         this.client = client;
+        auraStrategies = new ArrayList<>();
+        auraStrategies.add(new NoTargetStrategy());
+        auraStrategies.add(new HostileStrategy());
+        auraStrategies.add(new HostilePassiveStrategy());
+        auraStrategies.add(new PassiveStrategy());
+        auraStrategies.add(new PlayerStrategy());
+        auraStrategies.add(new PlayerAndHostileStrategy());
+        auraStrategies.add(new KillEverythingStrategy());
     }
 
     @Override
     public void toggle() {
-        if (++mode > 6) mode = 0;
-        if (mode != 0) enable();
-        else disable();
+        currentStrategy++;
+        currentStrategy %= auraStrategies.size();
+        currentAuraStrategy = auraStrategies.get(currentStrategy);
+        if (currentStrategy == 0) disable();
+        else enable();
     }
 
     public void tick() {
@@ -41,29 +44,12 @@ public class KillAura extends Hack implements Tickable {
 
         if (client.player.getAttackCooldownProgress(0.5f) < 1.0) return;
         for (Entity entity : client.world.getEntities()) {
+            if (entity == null) continue;
             if (entity == client.player || entity instanceof ZombifiedPiglinEntity) continue;
             double dist = client.player.getPos().distanceTo(entity.getPos());
             if (dist > client.interactionManager.getReachDistance()) continue;
-            if (entity instanceof MobEntity) {
-                if (((MobEntity)entity).getHealth() <= 0) continue;
-            }
-            if (entity == null) continue;
-            if (entity instanceof Monster && (mode == HOSTILES || mode == HOSTILES_AND_PASSIVES || mode == PLAYERS_AND_HOSTILES)) {
-                client.interactionManager.attackEntity(client.player, entity);
-                return;
-            }
-            if (entity instanceof PassiveEntity && (mode == PASSIVES || mode == HOSTILES_AND_PASSIVES)) {
-                client.interactionManager.attackEntity(client.player, entity);
-                return;
-            }
-            if (entity instanceof PlayerEntity && (mode == PLAYERS || mode == PLAYERS_AND_HOSTILES)) {
-                if (ThaiFoodClient.friendList.isEnabled()) {
-                    if (ThaiFoodClient.friendList.isFriend(entity.getEntityName())) continue;
-                }
-                client.interactionManager.attackEntity(client.player, entity);
-                return;
-            }
-            if (entity instanceof LivingEntity && mode == ALL) {
+
+            if (currentAuraStrategy.isTarget(entity)) {
                 client.interactionManager.attackEntity(client.player, entity);
                 return;
             }
@@ -72,19 +58,12 @@ public class KillAura extends Hack implements Tickable {
 
     @Override
     public String toString() {
-        if (mode == 0) return super.toString();
-        else if (mode == PLAYERS) return name + ": PLAYERS";
-        else if (mode == PASSIVES) return name + ": PASSIVES";
-        else if (mode == HOSTILES) return name + ": HOSTILES";
-        else if (mode == PLAYERS_AND_HOSTILES) return name + ": PLAYERS_AND_HOSTILES";
-        else if (mode == HOSTILES_AND_PASSIVES) return name + ": HOSTILES_AND_PASSIVES";
-        else if (mode == ALL) return name + ": ALL";
-        return "Error";
+        return currentAuraStrategy.getName();
     }
 
     @Override
     public Text getString() {
-        if (mode == 0) return super.getString();
+        if (currentStrategy == 0) return super.getString();
         String text = toString();
         return Text.empty().append(text).formatted(Formatting.GREEN);
     }

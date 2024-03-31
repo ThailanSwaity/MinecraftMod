@@ -20,7 +20,7 @@ public class Options extends Screen {
 
     public Options(Text title) {
         super(title);
-        this.parentScreen = parentScreen;
+        //this.parentScreen = parentScreen;
     }
 
     public void setParentScreen(Screen screen) {

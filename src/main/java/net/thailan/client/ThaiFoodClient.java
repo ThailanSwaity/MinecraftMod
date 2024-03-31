@@ -188,32 +188,6 @@ public class ThaiFoodClient implements ModInitializer {
 		hacksOverlay = new HacksOverlay();
 		additionManager.addDisplay(hacksOverlay);
 		xray = new Xray(client);
-		xray.addBlocksORE(
-				Blocks.STONE,
-				Blocks.DEEPSLATE,
-				Blocks.DIRT,
-				Blocks.GRASS_BLOCK,
-				Blocks.SAND,
-				Blocks.NETHERRACK,
-				Blocks.ANDESITE,
-				Blocks.DIORITE,
-				Blocks.GRANITE,
-				Blocks.BASALT,
-				Blocks.BLACKSTONE
-		);
-
-		xray.addBlocksCAVE(
-				Blocks.DIRT,
-				Blocks.GRASS_BLOCK,
-				Blocks.SAND
-		);
-
-		xray.addBlocksSPAWNER(
-				Blocks.COBBLESTONE,
-				Blocks.MOSSY_COBBLESTONE,
-				Blocks.SPAWNER,
-				Blocks.INFESTED_COBBLESTONE
-		);
 
 		additionManager.addDisplay(xray);
 

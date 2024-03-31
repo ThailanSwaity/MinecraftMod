@@ -18,11 +18,13 @@ public class BlockMixin {
     @Inject(at = @At("HEAD"), method="shouldDrawSide", cancellable = true)
     private static void shouldDrawSide(BlockState state, BlockView world, BlockPos pos, Direction side, BlockPos otherPos, CallbackInfoReturnable<Boolean> ci) {
         if (ThaiFoodClient.xray.isEnabled()) {
-            if (!ThaiFoodClient.xray.blockIsVisible(state.getBlock())) {
-                ci.setReturnValue(false);
-                ci.cancel();
-            } else if (ThaiFoodClient.xray.getMode() == Xray.ORE_MODE) {
-                ci.setReturnValue(true);
+            if (ThaiFoodClient.xray.isCulling()) {
+                if (!ThaiFoodClient.xray.blockIsVisible(state.getBlock())) {
+                    ci.setReturnValue(false);
+                    ci.cancel();
+                }
+            } else {
+                ci.setReturnValue(ThaiFoodClient.xray.blockIsVisible(state.getBlock()));
                 ci.cancel();
             }
         }
