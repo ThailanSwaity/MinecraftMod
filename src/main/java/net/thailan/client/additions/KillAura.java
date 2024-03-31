@@ -28,6 +28,8 @@ public class KillAura extends Hack implements Tickable {
         auraStrategies.add(new PlayerStrategy());
         auraStrategies.add(new PlayerAndHostileStrategy());
         auraStrategies.add(new KillEverythingStrategy());
+        currentStrategy = 0;
+        currentAuraStrategy = auraStrategies.get(currentStrategy);
     }
 
     @Override
