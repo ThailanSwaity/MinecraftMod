@@ -45,17 +45,7 @@ public class KillAura extends Hack implements Tickable {
         if (!isEnabled()) return;
 
         if (client.player.getAttackCooldownProgress(0.5f) < 1.0) return;
-        for (Entity entity : client.world.getEntities()) {
-            if (entity == null) continue;
-            if (entity == client.player || entity instanceof ZombifiedPiglinEntity) continue;
-            double dist = client.player.getPos().distanceTo(entity.getPos());
-            if (dist > client.interactionManager.getReachDistance()) continue;
-
-            if (currentAuraStrategy.isTarget(entity)) {
-                client.interactionManager.attackEntity(client.player, entity);
-                return;
-            }
-        }
+        currentAuraStrategy.doKilling(client.world.getEntities());
     }
 
     @Override
